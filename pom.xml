@@ -8,11 +8,11 @@
 		<version>2.6.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.springblogpost</groupId>
-	<artifactId>springblogpost</artifactId>
+	<groupId>com.springshopecommerce</groupId>
+	<artifactId>springshopecommerce</artifactId>
 	<version>1.0</version>
-	<name>springblogpost</name>
-	<description>springblogpost</description>
+	<name>springshopecommerce</name>
+	<description>springshopecommerce</description>
 	<properties>
 		<java.version>8</java.version>
 	</properties>
