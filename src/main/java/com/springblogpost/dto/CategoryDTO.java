@@ -3,8 +3,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -14,7 +17,9 @@ import java.io.Serializable;
 @Builder
 public class CategoryDTO extends AbstractDTO<CategoryDTO> implements Serializable {
 
-  @NotBlank(message = "Name should not be blank")
-  @Size(min = 3, message = "Name should be at least 3 chars")
+  @NotEmpty
+  @Length(min = 5)
   private String name;
+
+  private Boolean isEdit = false;
 }

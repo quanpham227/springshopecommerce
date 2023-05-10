@@ -1,0 +1,46 @@
+.img-profile {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+table.table {
+  table-layout: fixed;
+}
+
+table.table th i {
+  font-size: 13px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+table.table th:last-child {
+  width: 150px;
+}
+table.table th:first-child {
+  width: 100px;
+}
+table.table td a {
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 5px;
+  min-width: 24px;
+}
+table.table td a.add {
+  color: #27c46b;
+}
+table.table td a.edit {
+  color: #ffc107;
+}
+table.table td a.delete {
+  color: #e34724;
+}
+table.table td i {
+  font-size: 19px;
+}
+table.table td a.add i {
+  font-size: 24px;
+  margin-right: -1px;
+  position: relative;
+  top: 3px;
+}

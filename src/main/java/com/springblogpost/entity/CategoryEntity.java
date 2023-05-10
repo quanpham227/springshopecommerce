@@ -23,14 +23,10 @@ public class CategoryEntity extends BaseEntity {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String name, String code) {
-        this.name = name;
-    }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
