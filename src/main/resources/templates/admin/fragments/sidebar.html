@@ -56,6 +56,9 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
+              <a class="collapse-item" th:href="@{/admin/categories}"
+                >List Category</a
+              >
               <a class="collapse-item" th:href="@{/admin/categories/add}"
                 >Add Category</a
               >
@@ -79,7 +82,7 @@
             aria-controls="collapseUtilities"
           >
             <i class="fas fa-fw fa-wrench"></i>
-            <span>Manage Post</span>
+            <span>Manage Product</span>
           </a>
           <div
             id="collapseUtilities"
@@ -88,7 +91,17 @@
             data-parent="#accordionSidebar"
           >
             <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item" href="utilities-color.html">Colors</a>
+              <a class="collapse-item" th:href="@{/admin/products}"
+                >List Product</a
+              >
+              <a class="collapse-item" th:href="@{/admin/products/add}"
+                >Add Product</a
+              >
+              <a
+                class="collapse-item"
+                th:href="@{/admin/products/searchpaginated}"
+                >Search Product</a
+              >
             </div>
           </div>
         </li>
