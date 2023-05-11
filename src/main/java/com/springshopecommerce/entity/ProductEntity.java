@@ -15,67 +15,45 @@ import java.util.*;
 @Entity
 @Table(name = "product")
 public class ProductEntity extends AbstractEntity {
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "nvarchar(100) not null")
     private String name;
 
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
+    @Column(name = "unitPrice")
     private Double price;
+
+
+    @Column(length = 200)
+    private String image;
+
+    @Column(name = "description", columnDefinition = "nvarchar(500) not null")
+    private String description;
+
 
     @Column(name = "discount")
     private Float discount;
 
-    @Column(name = "view_count")
-    private Long viewCount;
-
-    @Column(name = "is_featured")
-    private Boolean isFeatured;
-
-    @Column(name = "description", length = 2000)
-    private String description;
-
     @Temporal(TemporalType.DATE)
-    @Column(name = "manufacture_date")
-    private Date manufactureDate;
+    private Date entereDate;
+
+    @Column(name = "status")
+    private ProductStatus status;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<OrderDetailEntity> orderDetails = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "manufacturer_id")
     private ManufacturerEntity manufacturer;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<ProductImageEntity> products ;
-
-    @Column(name = "status")
-    private ProductStatus status;
-
-    @PrePersist
-    public void prePersist() {
-        if(isFeatured == null) isFeatured = false;
-        viewCount = 0L;
-    }
-
     @PreUpdate
     public void preUpdate() {
-        if (this.quantity < 0) {
-            throw new IllegalArgumentException("Quantity must be greater than or equal to 0.");
-        }
-        if (this.price < 0) {
-            throw new IllegalArgumentException("Price must be greater than or equal to 0.");
-        }
-        if (this.discount < 0 || this.discount > 100) {
-            throw new IllegalArgumentException("Discount must be between 0 and 100.");
-        }
-        if (this.viewCount < 0) {
-            throw new IllegalArgumentException("View count must be greater than or equal to 0.");
-        }
-        if (this.status == null) {
-            throw new IllegalArgumentException("Status cannot be null.");
-        }
+
     }
 }

@@ -12,12 +12,4 @@ import lombok.NoArgsConstructor;
 public abstract class AbstractDTO<T> {
 
   private Long id;
-  @JsonIgnore
-  private Timestamp createdDate;
-  @JsonIgnore
-  private Timestamp modifiedDate;
-  @JsonIgnore
-  private String createdBy;
-  @JsonIgnore
-  private String modifiedBy;
 }

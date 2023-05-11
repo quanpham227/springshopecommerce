@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/dashboardLayout.html}"
+>
+  <head><style>
+    #image-preview {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    #image-preview img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  </style></head>
+  <body>
+    <section class="row" layout:fragment="content">
+      <div class="col mt-1">
+        <form action="" method="post">
+        <h1 class="h3 mb-2 text-gray-800 text-center">Add New Product</h1>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="id">Product ID</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="id"
+                    id="id"
+                    aria-describedby="ProductHId"
+                    placeholder="Product Id"
+                  />
+                  <small id="ProductHId" class="form-text text-muted"
+                    >Product ID is Required</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="categoryId">Category ID</label>
+                  <select class="form-control" name="categoryId" id="categoryId">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="name">Product Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    id="name"
+                    aria-describedby="nameHId"
+                    placeholder="Product Name"
+                  />
+                  <small id="nameHId" class="form-text text-muted"
+                    >Product Name is Required</small
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="quantity">Quantity</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="quantity"
+                    id="quantity"
+                    aria-describedby="quantityHId"
+                    placeholder="Quantity"
+                  />
+                  <small id="quantityHId" class="form-text text-muted"
+                    >Quantity Name is Required</small
+                  >
+                </div>
+                <div class="input-group form-group">
+                  <span class="input-group-text">Price</span>
+                  <input
+                    type="number"
+                    name="price"
+                    id="price"
+                    class="form-control"
+                    placeholder="Price"
+                  />
+                  <span class="input-group-text">$</span>
+                </div>
+                <div class="input-group form-group">
+                  <span class="input-group-text">Discount</span>
+                  <input
+                    type="number"
+                    name="discount"
+                    id="discount"
+                    class="form-control"
+                    placeholder="Discount"
+                  />
+                  <span class="input-group-text">%</span>
+                </div>
+                
+                <div class="form-group">
+                  <label for="status">Status</label>
+                  <select class="form-control" name="status" id="status">
+                    <option>Out of Stock</option>
+                    <option>Featured</option>
+                    <option>On Sale</option>
+                    <option>Bestseller</option>
+                    <option>Out of Order</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-6 border-left">
+                <div class="row ml-3 img">
+                  <div class="row" id="image-preview"></div>
+                </div>
+                <div class="form-group">
+                  <label for="productImage">Image File</label>
+                  <input type="file" class="form-control-file" name="productImage" id="productImage" placeholder="Product Image" aria-describedby="productImage" multiple>
+                  <small id="productImage" class="form-text text-muted">Product image is Required</small>
+                </div>
+                <script>
+                  document.getElementById("productImage").addEventListener("change", function () {
+                      // Xóa hình ảnh cũ
+                      document.getElementById("image-preview").innerHTML = "";
+                      // Lặp qua các tệp được chọn
+                      for (var i = 0; i < this.files.length; i++) {
+                        // Tạo một thẻ img mới
+                        var img = document.createElement("img");
+                        img.src = URL.createObjectURL(this.files[i]);
+                        img.className = "img-fluid rounded mr-2 mb-2";
+                        // Thêm thẻ img vào div image-preview
+                        document.getElementById("image-preview").appendChild(img);
+                      }
+                    });
+                </script>
+              </div>
+              
+            </div>
+ 
+          </div>
+        </div>
+      </div>
+      
+    </form>
+    </section>
+  </body>
+</html>
+

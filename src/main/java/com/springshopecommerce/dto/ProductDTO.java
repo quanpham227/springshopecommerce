@@ -1,16 +1,15 @@
 package com.springshopecommerce.dto;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.springshopecommerce.entity.ProductStatus;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+
 @Data
 public class ProductDTO extends AbstractDTO<ProductDTO> implements Serializable {
     @NotEmpty(message = "Name is required")
@@ -20,20 +19,18 @@ public class ProductDTO extends AbstractDTO<ProductDTO> implements Serializable 
     private Integer quantity;
 
     @Min(value = 0)
-    private Double price;
+    private Double unitPrice;
+
+    private String image;
 
     @Min(value = 0)
     @Max(value = 100)
     private Float discount;
 
-    private Long viewCount;
-
-    private Boolean isFeatured;
-
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date manufactureDate;
+
+    private Date entereDate;
 
     private ProductStatus status;
 
@@ -41,16 +38,8 @@ public class ProductDTO extends AbstractDTO<ProductDTO> implements Serializable 
 
     private Long manufacturerId;
 
-    private List<ProductImageDTO> images;
-
-    private ProductImageDTO image;
-
-    private CategoryDTO category;
-
-    private ManufacturerDTO manufacturer;
+    private Boolean isEdit = false;
 
     private MultipartFile imageFile;
-
-    private Boolean isEdit = false;
 
 }

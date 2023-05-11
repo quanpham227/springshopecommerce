@@ -30,9 +30,6 @@ public class CategoryController {
     @Autowired
     private ICategoryService categoryService;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
-
     @GetMapping("add")
     public String add (Model model) {
         model.addAttribute("category", new CategoryDTO());

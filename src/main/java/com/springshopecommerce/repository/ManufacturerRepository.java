@@ -23,11 +23,11 @@ public interface ManufacturerRepository extends JpaRepository<ManufacturerEntity
 
     @Query("SELECT m FROM ManufacturerEntity m WHERE m.id <> :id AND LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<ManufacturerEntity> findByIdNotAndNameContainsIgnoreCase(Long id, String name);
-    @Query("select m from ManufacturerEntity m order by m.createDate desc ")
-    List<ManufacturerEntity> getAllManufacturers();
-
-    @Query("select m from ManufacturerEntity m order by m.createDate desc ")
-    Page<ManufacturerEntity> getAllManufacturersPaginged(Pageable pageable);
+//    @Query("select m from ManufacturerEntity m order by m.createDate desc ")
+//    List<ManufacturerEntity> getAllManufacturers();
+//
+//    @Query("select m from ManufacturerEntity m order by m.createDate desc ")
+//    Page<ManufacturerEntity> getAllManufacturersPaginged(Pageable pageable);
 
     @Query("SELECT m FROM ManufacturerEntity m WHERE LOWER(m.name) LIKE %:name%")
    Page<ManufacturerEntity> getAllManufacturersPaginged(String name,Pageable pageable);

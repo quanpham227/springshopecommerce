@@ -30,13 +30,11 @@ public class ProductController {
     @Autowired
     private IProductService productService;
 
-    @Autowired
-    private ProductRepository productRepository;
 
     @GetMapping("add")
     public String add (Model model) {
         model.addAttribute("product", new ProductDTO());
-        return "admin/product/addOrEdit";
+        return "admin/products/addOrEdit";
     }
     @GetMapping ("edit/{id}")
     public ModelAndView edit (ModelMap model, @PathVariable ("id") Long id){
