@@ -16,11 +16,11 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity,Long> {
     @Query(value = "select c from CategoryEntity c")
     List<CategoryEntity> getAllCategories();
 
-    @Query(value = "select c from CategoryEntity c order by c.createdDate desc ")
+    @Query(value = "select c from CategoryEntity c ")
     Page<CategoryEntity> findAllPaginged(Pageable pageable);
 
 
-    @Query(value = "select c from CategoryEntity c where c.name LIKE ?1% order by c.createdDate desc")
+    @Query(value = "select c from CategoryEntity c where c.name LIKE ?1% ")
     Page<CategoryEntity> searchCategoryPaginged (String name, Pageable pageable);
 
     @Query(value = "select c from CategoryEntity c where c.name = ?1")
