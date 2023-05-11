@@ -6,33 +6,31 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "post_image")
-public class PostImageEntity extends BaseEntity{
+@Table(name = "product_image")
+public class ProductImageEntity extends AbstractEntity {
     @Column(name = "name", length = 100)
     private String name;
 
-    @Column(name = "file_name", length = 100)
-    private String fileName;
-
     @Column(name = "url")
     private String url;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private ProductEntity product;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        PostImageEntity that = (PostImageEntity) o;
+        ProductImageEntity that = (ProductImageEntity) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

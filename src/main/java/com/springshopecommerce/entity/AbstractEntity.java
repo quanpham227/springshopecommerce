@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Date;
 @MappedSuperclass // ddinhj nghia PARENT entity
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public abstract class BaseEntity {
     @LastModifiedBy
     private String modifiedBy;
 
-    public BaseEntity() {
+    public AbstractEntity() {
     }
 
     public Long getId() {

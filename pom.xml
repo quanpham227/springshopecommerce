@@ -92,11 +92,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>2.5.4</version>
-				<configuration>
-					<fork>true</fork>
-					<addResources>true</addResources>
-					<restartJvmOnExit>true</restartJvmOnExit>
-				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>org.springframework</groupId>
