@@ -95,7 +95,7 @@ public class CategoryController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(10);
 
-        Pageable pageable = PageRequest.of(currentPage -1, pageSize, Sort.by("name"));
+        Pageable pageable = PageRequest.of(currentPage -1, pageSize, Sort.by("id"));
         Page<CategoryEntity> resultPage = null;
 
         if(StringUtils.hasText(name)){
@@ -134,7 +134,7 @@ public class CategoryController {
            model.addAttribute("message", "category is not found !");
 
        }
-        return new ModelAndView("forward:/admin/categories/search", model);
+        return new ModelAndView("forward:/admin/categories", model);
     }
 
 }
