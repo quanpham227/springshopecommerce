@@ -13,8 +13,16 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(SQLException.class)
     public String handleSQLException(Model model, SQLException ex) {
-        model.addAttribute("errorMsg", "A database error occurred: " + ex.getMessage());
+        model.addAttribute("errorMessage", "A database error occurred: " + ex.getMessage());
         return "admin/errors/error";
+    }
+
+    @ExceptionHandler(CloudinaryException.class)
+    public ModelAndView handleCloudinaryException(CloudinaryException ex) {
+        ModelAndView mav = new ModelAndView("/admin/errors/uploadError");
+        mav.addObject("errorMessage", "failed to load to Cloudinary the image file: " + ex.getMessage());
+        mav.addObject("backUrl", "javascript:history.go(-1)");
+        return mav;
     }
 
     @ExceptionHandler(DataAccessException.class)
@@ -24,8 +32,8 @@ public class ExceptionHandlerController {
     }
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
-        ModelAndView modelAndView = new ModelAndView("admin/errors/404");
-        modelAndView.addObject("errorMsg", ex.getMessage());
+        ModelAndView modelAndView = new ModelAndView("admin/errors/error");
+        modelAndView.addObject("errorMessage", ex.getMessage());
         return modelAndView;
     }
 
