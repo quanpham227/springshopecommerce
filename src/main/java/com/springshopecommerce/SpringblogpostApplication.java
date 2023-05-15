@@ -1,5 +1,6 @@
 package com.springshopecommerce;
 
+import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +22,11 @@ public class SpringblogpostApplication {
 		modelMapper.createTypeMap(String.class, Date.class);
 		modelMapper.getConfiguration().setSkipNullEnabled(true);
 		return modelMapper;
+	}
+
+	@Bean
+	public LayoutDialect layoutDialect() {
+		return new LayoutDialect();
 	}
 
 }
