@@ -35,8 +35,22 @@ public class CloudinaryService implements ICloudinaryService {
             return cloudinaryDTO;
         } catch (Exception ex) {
 
-            throw new CloudinaryException("failed to load to Cloudinary the image file: ");
+            throw new CloudinaryException("failed to load to Cloudinary the image file: ", ex);
         }
+    }
+
+    @Override
+    public CloudinaryDTO update(String publicId, MultipartFile file) {
+       try {
+           Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
+                   ObjectUtils.asMap("public_id", publicId, "resource_type", "auto"));
+           CloudinaryDTO cloudinaryDTO = new CloudinaryDTO();
+           cloudinaryDTO.setPublicId(uploadResult.get("public_id").toString());
+           cloudinaryDTO.setUrl((String) uploadResult.get("secure_url"));
+           return cloudinaryDTO;
+       }catch (Exception exception){
+           throw new CloudinaryException("Failed to update image on Cloudinary with public ID " + publicId, exception);
+       }
     }
 
     @Override
