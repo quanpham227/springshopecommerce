@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/dashboardLayout.html}"
+>
+    <head> </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-5 mt-4 bg-white shadow border">
+                    <div class="row card-header bg-white justify-content-center">
+                        <h1 class="h3 mb-0 text-gray-800 text-center">Add Manufacturer</h1>
+                    </div>
+                    <form
+                        th:action="@{/admin/manufacturers/saveOrUpdate}"
+                        enctype="multipart/form-data"
+                        method="post"
+                        th:object="${manufacturer}"
+                    >
+                        <div class="card-body bg-white">
+                            <div class="form-group mb-3">
+                                <label for="id"> Manufacturer ID</label>
+                                <input type="hidden" th:field="*{isEdit}" />
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    th:field="*{id}"
+                                    aria-describedby="manufacturerIdHid"
+                                    placeholder="Manufacturer ID"
+                                    readonly
+                                />
+                                <small
+                                    th:if="${#fields.hasErrors('id')}"
+                                    id="manufacturerIdHid"
+                                    class="form-text text-muted"
+                                    >Manufacturer id Required
+                                </small>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="form-label">Manufacturer Name </label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    th:field="*{name}"
+                                    id="name"
+                                    aria-describedby="nameHid"
+                                    placeholder="Manufacturer Name"
+                                />
+                                <small th:if="${#fields.hasErrors('name')}" id="nameHid" class="form-text text-danger"
+                                    >Manufacturer id Required
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="logo" class="form-label">Logo</label>
+                                <input
+                                    class="form-control form-control-sm"
+                                    type="file"
+                                    id="logoFile"
+                                    name="logoFile"
+                                    onchange="previewImage(event)"
+                                    accept="image/*"
+                                    required
+                                />
+                                <div id="image-preview" style="width: 120px; height: 100px">
+                                    <img
+                                        id="image"
+                                        th:src="${manufacturer.logoUrl != null}? ${manufacturer.logoUrl} : '/images/no-image.jpg'"
+                                        width="90%"
+                                        class="img-fluid rounded mr-2 mb-2 mt-2"
+                                        alt="Default Image"
+                                        style="height: 100px; width: 120px"
+                                    />
+                                </div>
+                                <small
+                                    th:if="${#fields.hasErrors('logoFile')}"
+                                    id="logoHid"
+                                    class="form-text text-muted"
+                                    >Logo Required
+                                </small>
+                                <script>
+                                    function previewImage(event) {
+                                        var preview = document.querySelector('#image-preview');
+                                        preview.innerHTML = '';
+                                        var file = event.target.files[0];
+                                        var reader = new FileReader();
+
+                                        reader.onloadend = function () {
+                                            var img = document.createElement('img');
+                                            img.src = reader.result;
+                                            img.className = 'img-fluid rounded mr-2 mb-2';
+                                            preview.appendChild(img);
+                                        };
+
+                                        if (file) {
+                                            reader.readAsDataURL(file);
+                                        } else {
+                                            var img = document.createElement('img');
+                                            img.src = '/images/no-image.jpg';
+                                            img.width = '90%';
+                                            img.className = 'img-fluid rounded mr-2 mb-2';
+                                            preview.appendChild(img);
+                                        }
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted bg-white d-flex justify-content-end">
+                            <div class="btn-group btn-sm ms-auto">
+                                <a
+                                    th:href="@{/admin/manufacturers/searchpaginated}"
+                                    class="btn btn-primary me-1 rounded"
+                                    >List</a
+                                >
+
+                                <button class="btn btn-sm btn-primary rounded">
+                                    <span th:if="${manufacturer.isEdit}">Update</span>
+                                    <span th:unless="${manufacturer.isEdit}">Create</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

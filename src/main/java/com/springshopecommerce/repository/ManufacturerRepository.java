@@ -1,5 +1,6 @@
 package com.springshopecommerce.repository;
 
+import com.springshopecommerce.entity.CategoryEntity;
 import com.springshopecommerce.entity.ManufacturerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,20 +21,19 @@ public interface ManufacturerRepository extends JpaRepository<ManufacturerEntity
     @Query("SELECT e FROM ManufacturerEntity e WHERE LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<ManufacturerEntity> findByNameContainsIgnoreCase(@Param("name") String name);
 
-
+    @Query("SELECT m FROM ManufacturerEntity m WHERE LOWER(m.name) = LOWER(:name)")
+    Optional<ManufacturerEntity> findByNameIgnoreCase(@Param("name") String name);
     @Query("SELECT m FROM ManufacturerEntity m WHERE m.id <> :id AND LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<ManufacturerEntity> findByIdNotAndNameContainsIgnoreCase(Long id, String name);
-//    @Query("select m from ManufacturerEntity m order by m.createDate desc ")
-//    List<ManufacturerEntity> getAllManufacturers();
-//
-//    @Query("select m from ManufacturerEntity m order by m.createDate desc ")
-//    Page<ManufacturerEntity> getAllManufacturersPaginged(Pageable pageable);
 
     @Query("SELECT m FROM ManufacturerEntity m WHERE LOWER(m.name) LIKE %:name%")
-   Page<ManufacturerEntity> getAllManufacturersPaginged(String name,Pageable pageable);
+    Page<ManufacturerEntity> getAllManufacturersPaginged(String name,Pageable pageable);
+
+    @Query(value = "select m from ManufacturerEntity m ")
+    Page<ManufacturerEntity> findAllManufacturersPaginged(Pageable pageable);
 
     @Query("select m from ManufacturerEntity m where m.id = ?1")
-    Optional<ManufacturerEntity> getManufacturerEntitiesById(Long id);
+    ManufacturerEntity getManufacturerEntitiesById(Long id);
 
     @Modifying
     @Query("DELETE FROM ManufacturerEntity m WHERE m.id = :id")

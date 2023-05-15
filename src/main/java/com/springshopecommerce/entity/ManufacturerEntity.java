@@ -19,8 +19,12 @@ public class ManufacturerEntity extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "logo")
-    private String logo;
+    @Column(name = "logo_url")
+    private String logoUrl;
+
+    @Column(name = "publicId")
+    private String publicId;
+
 
     @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
     private List<ProductEntity> products = new ArrayList<>();

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 
@@ -13,9 +14,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ManufacturerDTO extends AbstractDTO<ManufacturerDTO> implements Serializable {
+    @NotEmpty
     private String name;
-    private String logo;
+    private String logoUrl;
+    private String publicId;
 
     @JsonIgnore
     private MultipartFile logoFile;
+
+    private Boolean isEdit = false;
 }

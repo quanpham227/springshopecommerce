@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/dashboardLayout.html}"
+>
+    <head>
+        <style></style>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="row justify-content-center mx-3 my-3 shadow">
+                <div class="card-header bg-white">
+                    <h1 class="h3 mb-0 text-gray-800 text-center">List Manufacturer</h1>
+                </div>
+                <div th:if="${message != null}" class="text-center alert alert-success" role="alert">
+                    <i>[[${message}]]</i>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="col-1" scope="col">Logo</th>
+                                    <th class="col-1" scope="col">Id</th>
+                                    <th class="col-8" scope="col">Name</th>
+                                    <th class="col-2" cope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each=" manufacturer : ${manufacturers}">
+                                    <td scope="row">
+                                        <img
+                                            th:src="${manufacturer.logoUrl}"
+                                            alt="Manufacturer logo"
+                                            width="40px"
+                                            height="30px"
+                                        />
+                                    </td>
+                                    <td scope="row">[[${manufacturer.id}]]</td>
+                                    <td th:text="${manufacturer.name}"></td>
+                                    <td class="d-flex gap-3 justify-content-center">
+                                        <a th:href="@{/admin/manufacturers/view}" title="view" data-toggle="tooltip"
+                                            ><i class="fas fa-eye"></i
+                                        ></a>
+                                        <a
+                                            th:href="@{'/admin/manufacturers/edit/' + ${manufacturer.id}}"
+                                            title="Edit"
+                                            data-toggle="tooltip"
+                                            ><i class="fas fa-pen"></i
+                                        ></a>
+                                        <a
+                                            th:href="@{'/admin/manufacturers/delete/' + ${manufacturer.id}}"
+                                            title="Delete"
+                                            data-toggle="tooltip"
+                                            ><i class="fas fa-trash"></i
+                                        ></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
