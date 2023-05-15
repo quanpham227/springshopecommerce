@@ -8,6 +8,8 @@ public interface ICloudinaryService {
 
     CloudinaryDTO upload(MultipartFile file);
 
+    CloudinaryDTO update(String publicId , MultipartFile file);
+
     void delete(String publicId);
 
     ByteArrayResource download(String publicId, int width, int height,
