@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/dashboardLayout.html}"
+>
+    <head> </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="row justify-content-center mx-3 my-3 shadow">
+                <div class="card-header bg-white">
+                    <h1 class="h3 mb-0 text-gray-800 text-center">List Products</h1>
+                </div>
+                <div th:if="${message != null}" class="alert alert-success" role="alert">
+                    <i>[[${message}]]</i>
+                </div>
+                <div class="row" th:if="${!productPage.hasContent()}">
+                    <div class="col mt-1">
+                        <div class="alert alert-danger" role="alert">
+                            <strong>No Product Found</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <form th:action="@{/admin/products/list}">
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        id="name"
+                                        class="form-control me-2"
+                                        placeholder="Search for..."
+                                    />
+
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary"><i class="fas fa-search fa-sm"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end">
+                            <a class="btn btn-primary btn-sm" th:href="@{/admin/products/add}">New </a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table
+                            class="table table-bordered text-center"
+                            id="dataTable"
+                            width="100%"
+                            cellspacing="0"
+                            th:if="${productPage.hasContent()}"
+                        >
+                            <thead>
+                                <tr>
+                                    <th class="col-1">Logo</th>
+                                    <th class="col-1">Id</th>
+                                    <th class="col-4">Name</th>
+                                    <th class="col-1">Quantity</th>
+                                    <th class="col-1">Price</th>
+                                    <th class="col-1">Discount</th>
+                                    <th class="col-1">Status</th>
+                                    <th class="col-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each=" product, iStat : ${productPage.content}">
+                                    <td scope="row">
+                                        <img th:src="${product.image}" alt="ProductImage" width="40px" height="30px" />
+                                    </td>
+                                    <td>[[${product.id}]]</td>
+                                    <td th:text="${product.name}"></td>
+                                    <td th:text="${product.quantity}"></td>
+                                    <td th:text="${product.price}"></td>
+                                    <td th:text="${product.discount}"></td>
+                                    <td th:text="${product.status}"></td>
+                                    <td class="d-flex gap-3 justify-content-center">
+                                        <a th:href="@{/admin/products/view}" title="view" data-toggle="tooltip"
+                                            ><i class="fas fa-eye"></i
+                                        ></a>
+                                        <a
+                                            th:href="@{'/admin/products/edit/' + ${product.id}}"
+                                            title="Edit"
+                                            data-toggle="tooltip"
+                                            ><i class="fas fa-pen"></i
+                                        ></a>
+                                        <a
+                                            th:href="@{'/admin/products/delete/' + ${product.id}}"
+                                            title="Delete"
+                                            data-toggle="tooltip"
+                                            ><i class="fas fa-trash"></i
+                                        ></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row card-footer text-muted bg-white justify-content-start">
+                        <div class="col-2">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <select
+                                        name="size"
+                                        id="size"
+                                        class="form-select form-select-sm"
+                                        onchange="this.form.submit()"
+                                    >
+                                        <option th:selected="${productPage.size == 5}" value="5">5</option>
+                                        <option th:selected="${productPage.size == 10}" value="10">10</option>
+                                        <option th:selected="${productPage.size == 15}" value="15">15</option>
+                                        <option th:selected="${productPage.size == 20}" value="20">20</option>
+                                        <option th:selected="${productPage.size == 30}" value="30">30</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col text-end">
+                            <nav aria-label="Page navigation" th:if="${productPage.totalPages > 0}">
+                                <ul class="pagination justify-content-end">
+                                    <li th:class="${1 == productPage.number + 1} ? 'page-item active' : 'page-item'">
+                                        <a
+                                            th:href="@{/admin/products/list(name=${name}, size=${productPage.size},page=${1})}"
+                                            class="page-link"
+                                            >First</a
+                                        >
+                                    </li>
+                                    <li
+                                        class="page-item active"
+                                        th:each=" pageNumber : ${pageNumbers}"
+                                        th:if="${productPage.totalPages > 1}"
+                                        th:class="${pageNumber == productPage.number + 1} ? 'page-item active' : 'page-item'"
+                                    >
+                                        <a
+                                            th:href="@{/admin/products/list(name=${name}, size=${productPage.size},page=${pageNumber})}"
+                                            class="page-link"
+                                            th:text="${pageNumber}"
+                                        ></a>
+                                    </li>
+                                    <li
+                                        th:class="${productPage.totalPages == productPage.number + 1} ? 'page-item active': 'page-item'"
+                                    >
+                                        <a
+                                            th:href="@{/admin/products/list(name=${name}, size=${productPage.size},page=${productPage.totalPages})}"
+                                            class="page-link"
+                                            >Last</a
+                                        >
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

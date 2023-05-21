@@ -11,7 +11,12 @@
             <div class="row justify-content-center">
                 <div class="col-5 mt-4 bg-white shadow border">
                     <div class="row card-header bg-white justify-content-center">
-                        <h1 class="h3 mb-0 text-gray-800 text-center">Add Manufacturer</h1>
+                        <h1 class="h3 mb-0 text-gray-800 text-center" th:if="${manufacturer.isEdit}">
+                            Update Manufacturer
+                        </h1>
+                        <h1 class="h3 mb-0 text-gray-800 text-center" th:unless="${manufacturer.isEdit}">
+                            Add Manufacturer
+                        </h1>
                     </div>
                     <form
                         th:action="@{/admin/manufacturers/saveOrUpdate}"
@@ -61,9 +66,27 @@
                                     name="logoFile"
                                     onchange="previewImage(event)"
                                     accept="image/*"
+                                    th:if="${!manufacturer.isEdit}"
                                     required
                                 />
-                                <div id="image-preview" style="width: 120px; height: 100px">
+                                <input
+                                    class="form-control form-control-sm"
+                                    type="file"
+                                    id="logoFile"
+                                    name="logoFile"
+                                    onchange="previewImage(event)"
+                                    accept="image/*"
+                                    th:if="${manufacturer.isEdit}"
+                                />
+                                <!-- <input
+                                    type="text"
+                                    class="form-control form-control-sm mt-2"
+                                    id="fileNameInput"
+                                    th:field="*{fileName}"
+                                    th:if="${manufacturer.isEdit}"
+                                    readonly
+                                /> -->
+                                <div id="image-preview" style="width: 120px; height: 100px" class="content-center mt-2">
                                     <img
                                         id="image"
                                         th:src="${manufacturer.logoUrl != null}? ${manufacturer.logoUrl} : '/images/no-image.jpg'"
@@ -82,7 +105,9 @@
                                 <script>
                                     function previewImage(event) {
                                         var preview = document.querySelector('#image-preview');
+                                        //var fileNameInput = document.getElementById('fileNameInput');
                                         preview.innerHTML = '';
+
                                         var file = event.target.files[0];
                                         var reader = new FileReader();
 
@@ -91,6 +116,16 @@
                                             img.src = reader.result;
                                             img.className = 'img-fluid rounded mr-2 mb-2';
                                             preview.appendChild(img);
+                                            //fileNameInput.value = file.name; // Hiển thị tên tệp vào trường input text
+
+                                            var logoFileInput = document.getElementById('logoFile');
+                                            if (!file) {
+                                                // Nếu không có tệp được chọn, xóa thuộc tính 'logoFile' trước khi submit
+                                                logoFileInput.removeAttribute('name');
+                                            } else {
+                                                // Nếu có tệp được chọn, đặt lại thuộc tính 'name' cho trường input file
+                                                logoFileInput.setAttribute('name', 'logoFile');
+                                            }
                                         };
 
                                         if (file) {
@@ -101,6 +136,7 @@
                                             img.width = '90%';
                                             img.className = 'img-fluid rounded mr-2 mb-2';
                                             preview.appendChild(img);
+                                            //fileNameInput.value = '';
                                         }
                                     }
                                 </script>
@@ -108,11 +144,7 @@
                         </div>
                         <div class="card-footer text-muted bg-white d-flex justify-content-end">
                             <div class="btn-group btn-sm ms-auto">
-                                <a
-                                    th:href="@{/admin/manufacturers/searchpaginated}"
-                                    class="btn btn-primary me-1 rounded"
-                                    >List</a
-                                >
+                                <a th:href="@{/admin/manufacturers/list}" class="btn btn-primary me-1 rounded">List</a>
 
                                 <button class="btn btn-sm btn-primary rounded">
                                     <span th:if="${manufacturer.isEdit}">Update</span>

@@ -25,10 +25,10 @@ public class CloudinaryService implements ICloudinaryService {
 
 
     @Override
-    public CloudinaryDTO upload(MultipartFile file) {
+    public CloudinaryDTO upload(MultipartFile file, String folderName) {
         try {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                    ObjectUtils.asMap("folder", "springshopecommerce/manufacturers", "resource_type", "auto"));
+                    ObjectUtils.asMap("folder", "springshopecommerce/" + folderName, "resource_type", "auto"));
             CloudinaryDTO cloudinaryDTO = new CloudinaryDTO();
             cloudinaryDTO.setPublicId(uploadResult.get("public_id").toString());
             cloudinaryDTO.setUrl((String) uploadResult.get("secure_url"));

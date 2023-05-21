@@ -1,13 +1,12 @@
 package com.springshopecommerce.service.impl;
 
-import com.springshopecommerce.dto.CategoryDTO;
 import com.springshopecommerce.dto.CloudinaryDTO;
 import com.springshopecommerce.dto.ManufacturerDTO;
-import com.springshopecommerce.entity.CategoryEntity;
 import com.springshopecommerce.entity.ManufacturerEntity;
+import com.springshopecommerce.exception.NotFoundException;
 import com.springshopecommerce.repository.ManufacturerRepository;
 import com.springshopecommerce.service.IManufacturerService;
-import org.modelmapper.ModelMapper;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
+
 
 @Service
 public class ManufacturerService implements IManufacturerService {
@@ -26,72 +25,91 @@ public class ManufacturerService implements IManufacturerService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Override
-    public List<ManufacturerDTO> getManufacturers() {
-        return manufacturerRepository.findAllManufacturers()
-                .stream()
-                .map(ManufacturerEntity-> modelMapper.map(ManufacturerEntity, ManufacturerDTO.class))
-                .collect(Collectors.toList());
+    public List<ManufacturerDTO> getIdAndNameAndLogoManufacturer() {
+        List<ManufacturerDTO> manufacturers = manufacturerRepository.getIdAndNameAndLogoManufacturer();
+        return manufacturers;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ManufacturerDTO createManufacturer(ManufacturerDTO manufacturerDTO) {
-        CloudinaryDTO cloudinaryDTO = cloudinaryService.upload(manufacturerDTO.getLogoFile());
+        String folderName = "manufacturers";
+        String fileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(manufacturerDTO.getLogoFile().getOriginalFilename());
+
+        CloudinaryDTO cloudinaryDTO = cloudinaryService.upload(manufacturerDTO.getLogoFile(), folderName);
+
         ManufacturerEntity manufacturerEntity = new ManufacturerEntity();
         manufacturerEntity.setName(manufacturerDTO.getName());
         manufacturerEntity.setPublicId(cloudinaryDTO.getPublicId());
         manufacturerEntity.setLogoUrl(cloudinaryDTO.getUrl());
+        manufacturerEntity.setFileName(fileName);
+        ManufacturerEntity manufacturerSave = manufacturerRepository.save(manufacturerEntity);
 
-        return modelMapper.map((manufacturerRepository.save(manufacturerEntity)), ManufacturerDTO.class);
+        ManufacturerDTO manufacturerResponse = new ManufacturerDTO();
+        manufacturerResponse.setId(manufacturerSave.getId());
+        manufacturerResponse.setName(manufacturerSave.getName());
+        manufacturerResponse.setLogoUrl(manufacturerSave.getLogoUrl());
+        manufacturerResponse.setFileName(manufacturerResponse.getFileName());
+        return  manufacturerResponse;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ManufacturerDTO updateManufacturer(ManufacturerDTO manufacturerDTO) {
-        ManufacturerEntity manufacturerEntityOld = manufacturerRepository.getManufacturerEntitiesById(manufacturerDTO.getId());
-        CloudinaryDTO cloudinaryDTO = new CloudinaryDTO();
-        cloudinaryDTO = cloudinaryService.update(manufacturerEntityOld.getPublicId(), manufacturerDTO.getLogoFile());
-        manufacturerDTO.setLogoUrl(cloudinaryDTO.getUrl());
-        manufacturerDTO.setPublicId(cloudinaryDTO.getPublicId());
-        this.modelMapper.map(manufacturerDTO, manufacturerEntityOld);
-        return modelMapper.map(this.manufacturerRepository.save(manufacturerEntityOld), ManufacturerDTO.class);
+        ManufacturerEntity manufacturerEntityOld = manufacturerRepository.findManufacturerEntityById(manufacturerDTO.getId())
+                .orElseThrow(() -> new NotFoundException("cannot find manufacturer with :" + manufacturerDTO.getId()));
+
+        if(manufacturerDTO.getLogoFile() != null){
+            String fileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(manufacturerDTO.getLogoFile().getOriginalFilename());
+            CloudinaryDTO cloudinaryDTO = new CloudinaryDTO();
+            cloudinaryDTO = cloudinaryService.update(manufacturerEntityOld.getPublicId(), manufacturerDTO.getLogoFile());
+            manufacturerEntityOld.setLogoUrl(cloudinaryDTO.getUrl());
+            manufacturerEntityOld.setPublicId(cloudinaryDTO.getPublicId());
+            manufacturerEntityOld.setFileName(fileName);
+
+        }
+        manufacturerEntityOld.setName(manufacturerDTO.getName());
+        ManufacturerEntity manufacturerEntity = manufacturerRepository.save(manufacturerEntityOld);
+
+        ManufacturerDTO manufacturer = new ManufacturerDTO();
+        manufacturer.setId(manufacturerEntity.getId());
+        manufacturer.setName(manufacturerEntity.getName());
+        manufacturer.setLogoUrl(manufacturerEntity.getLogoUrl());
+
+        return manufacturer;
     }
 
     @Override
-    public ManufacturerDTO findByNameIgnoreCase(String name) {
-        Optional<ManufacturerEntity> manufacturerEntityOptional = manufacturerRepository.findByNameIgnoreCase(name);
-        if(manufacturerEntityOptional.isPresent()){
-            ManufacturerEntity manufacturer = manufacturerEntityOptional.get();
-            return modelMapper.map(manufacturer, ManufacturerDTO.class);
-        }else {
-            return new ManufacturerDTO();
-        }
+    public ManufacturerDTO findManufacturerByNameIgnoreCase(String name) {
+        ManufacturerDTO manufacturerDTO = manufacturerRepository.findManufacturerEntitiesByNameIgnoreCase(name);
+        return manufacturerDTO;
     }
 
     @Override
     public ManufacturerDTO getManufacturerEntitiesById(Long id) {
-        ManufacturerEntity manufacturerEntity = manufacturerRepository.getManufacturerEntitiesById(id);
-        return modelMapper.map(manufacturerEntity, ManufacturerDTO.class);
+        ManufacturerDTO manufacturerDTO = manufacturerRepository.findIdAndNameAndLogoUrlByManufacturerId(id)
+                .orElseThrow(() -> new NotFoundException("cannot find manufacturer with :" + id));
+        return manufacturerDTO;
     }
 
     @Override
-    public Page<ManufacturerEntity> searchManufacturersPaginged(String name, Pageable pageable) {
-        return manufacturerRepository.getAllManufacturersPaginged(name, pageable);
+    public Page<ManufacturerDTO> searchManufacturersByName(String name, Pageable pageable) {
+        Page<ManufacturerDTO> manufacturerDTOPage = manufacturerRepository.searchManufacturersByName(name, pageable);
+        return manufacturerDTOPage;
     }
 
     @Override
-    public Page<ManufacturerEntity> findAllManufacturersPaginged(Pageable pageable) {
-        return manufacturerRepository.findAllManufacturersPaginged(pageable);
+    public Page<ManufacturerDTO> findAllManufacturers(Pageable pageable) {
+        Page<ManufacturerDTO> manufacturerDTOPage = manufacturerRepository.findAllManufacturers( pageable);
+        return manufacturerDTOPage;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteManufacturerEntityById(Long id) {
-        ManufacturerEntity manufacturerEntity = manufacturerRepository.getManufacturerEntitiesById(id);
+        ManufacturerEntity manufacturerEntity = manufacturerRepository.findManufacturerEntityById(id)
+                .orElseThrow(() -> new NotFoundException("cannot find manufacturer with :" + id));
         cloudinaryService.delete(manufacturerEntity.getPublicId());
         manufacturerRepository.deleteManufacturerEntityById(id);
     }

@@ -9,11 +9,13 @@
 <body>
 <div layout:fragment="content">
     <div class="text-center">
-        <div class="error mx-auto" data-text="404">Clodbinary Error</div>
-        <div id="error-message" th:text="${errorMessage}"></div>
-        <div class="form-group">
-            <a th:href="@{/admin}">&larr; Back to Dashboard</a>
+        <p class="lead text-gray-800 mb-5 mt-4">System Error</p>
+        <div class="error mx-auto" data-text="404">
+            <h1 class="" style="font-size: 80px">500</h1></h0>
         </div>
+
+        <p class="text-gray-500 mb-0" th:text="${errorMessage}"></p>
+        <a th:href="@{/admin}">&larr; Back to Dashboard</a>
     </div>
 </div>
 </body>

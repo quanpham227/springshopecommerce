@@ -8,13 +8,12 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ICategoryService {
-    List<CategoryDTO> getAllCategories();
-    Page<CategoryEntity> searchCategoryPaginged(String name, Pageable pageable);
-    Page<CategoryEntity> findAllPaginged(Pageable pageable);
-
+    List<CategoryDTO> getIdAndNameCategory();
+    Page<CategoryDTO> searchCategoryPaginged(String name, Pageable pageable);
+    Page<CategoryDTO> findAllPaginged(Pageable pageable);
     CategoryDTO findByCategoryId(Long id);
-    CategoryDTO findByCategoryName(String name);
-    List<CategoryDTO> findByNameContaining(String name);
+    CategoryDTO getIdAndNameCategoryById(Long id);
+
     CategoryDTO createCategory(CategoryDTO categoryDTO);
     CategoryDTO updateCategory(CategoryDTO categoryDTO);
     void deleteCategoryById(Long id);

@@ -11,7 +11,8 @@
             <div class="row justify-content-center">
                 <div class="col-5 mt-4 bg-white shadow border">
                     <div class="row card-header bg-white justify-content-center">
-                        <h1 class="h3 mb-0 text-gray-800 text-center">Add Categories</h1>
+                        <h1 class="h3 mb-0 text-gray-800 text-center" th:if="${category.isEdit}">Update Category</h1>
+                        <h1 class="h3 mb-0 text-gray-800 text-center" th:unless="${category.isEdit}">Add Category</h1>
                     </div>
                     <form th:action="@{/admin/categories/saveOrUpdate}" method="post" th:object="${category}">
                         <div class="card-body bg-white">
@@ -42,6 +43,7 @@
                                     id="name"
                                     aria-describedby="nameHid"
                                     placeholder="Category Name"
+                                    required
                                 />
                                 <small th:if="${#fields.hasErrors('name')}" id="nameHid" class="form-text text-danger"
                                     >Name id Required
@@ -50,7 +52,7 @@
                         </div>
                         <div class="card-footer text-muted bg-white d-flex justify-content-end">
                             <div class="btn-group btn-sm ms-auto">
-                                <a th:href="@{/admin/categories}" class="btn btn-primary me-1 rounded">List</a>
+                                <a th:href="@{/admin/categories/list}" class="btn btn-primary me-1 rounded">List</a>
 
                                 <button class="btn btn-sm btn-primary rounded">
                                     <span th:if="${category.isEdit}">Update</span>

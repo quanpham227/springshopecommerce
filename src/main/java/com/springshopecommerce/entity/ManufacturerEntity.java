@@ -19,6 +19,9 @@ public class ManufacturerEntity extends AbstractEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "file_name")
+    private String fileName;
+
     @Column(name = "logo_url")
     private String logoUrl;
 
@@ -26,7 +29,15 @@ public class ManufacturerEntity extends AbstractEntity {
     private String publicId;
 
 
-    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductEntity> products = new ArrayList<>();
 
+
+    public ManufacturerEntity(Long id, String name, String logoUrl, String publicId, String fileName) {
+        super(id);
+        this.name = name;
+        this.logoUrl = logoUrl;
+        this.publicId = publicId;
+        this.fileName = fileName;
+    }
 }

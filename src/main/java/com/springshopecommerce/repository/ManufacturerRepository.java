@@ -1,5 +1,7 @@
 package com.springshopecommerce.repository;
 
+import com.springshopecommerce.dto.CategoryDTO;
+import com.springshopecommerce.dto.ManufacturerDTO;
 import com.springshopecommerce.entity.CategoryEntity;
 import com.springshopecommerce.entity.ManufacturerEntity;
 import org.springframework.data.domain.Page;
@@ -16,24 +18,36 @@ import java.util.Optional;
 @Repository
 public interface ManufacturerRepository extends JpaRepository<ManufacturerEntity, Long> {
 
-    @Query(value = "select m from ManufacturerEntity m")
-    List<ManufacturerEntity> findAllManufacturers();
-    @Query("SELECT e FROM ManufacturerEntity e WHERE LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    List<ManufacturerEntity> findByNameContainsIgnoreCase(@Param("name") String name);
+    @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl ) " +
+            "FROM ManufacturerEntity m ")
+    List<ManufacturerDTO> getIdAndNameAndLogoManufacturer();
 
-    @Query("SELECT m FROM ManufacturerEntity m WHERE LOWER(m.name) = LOWER(:name)")
-    Optional<ManufacturerEntity> findByNameIgnoreCase(@Param("name") String name);
-    @Query("SELECT m FROM ManufacturerEntity m WHERE m.id <> :id AND LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    List<ManufacturerEntity> findByIdNotAndNameContainsIgnoreCase(Long id, String name);
+    @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl) " +
+            "FROM ManufacturerEntity m ")
+    Page<ManufacturerDTO> findAllManufacturers(Pageable pageable);
 
-    @Query("SELECT m FROM ManufacturerEntity m WHERE LOWER(m.name) LIKE %:name%")
-    Page<ManufacturerEntity> getAllManufacturersPaginged(String name,Pageable pageable);
+    @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl) " +
+            "FROM ManufacturerEntity m " +
+            "WHERE LOWER(m.name) LIKE LOWER(concat('%', :name, '%'))")
+    Page<ManufacturerDTO> searchManufacturersByName (String name, Pageable pageable);
 
-    @Query(value = "select m from ManufacturerEntity m ")
-    Page<ManufacturerEntity> findAllManufacturersPaginged(Pageable pageable);
+    @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl, m.fileName) " +
+            "FROM ManufacturerEntity m " +
+            "WHERE m.id = :manufacturerId")
+    Optional<ManufacturerDTO> findIdAndNameAndLogoUrlByManufacturerId(@Param("manufacturerId") Long id);
 
-    @Query("select m from ManufacturerEntity m where m.id = ?1")
-    ManufacturerEntity getManufacturerEntitiesById(Long id);
+    @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl) " +
+            "FROM ManufacturerEntity m " +
+            "WHERE LOWER(m.name) LIKE LOWER(concat('%', :name, '%'))")
+    ManufacturerDTO findManufacturerEntitiesByNameIgnoreCase(String name);
+
+
+    @Query("SELECT new com.springshopecommerce.entity.ManufacturerEntity(m.id, m.name, m.logoUrl, m.publicId, m.fileName) " +
+            "FROM ManufacturerEntity m " +
+            "WHERE m.id = :manufacturerId")
+    Optional<ManufacturerEntity> findManufacturerEntityById(@Param("manufacturerId") Long id);
+
+
 
     @Modifying
     @Query("DELETE FROM ManufacturerEntity m WHERE m.id = :id")

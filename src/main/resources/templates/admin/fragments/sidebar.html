@@ -16,8 +16,8 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-              <span><i class="fas fa-house-user"></i></span>
+            <a class="nav-link active" aria-current="page" th:href="@{/admin}">
+              <span ><i class="fas fa-house-user"></i></span>
               Dashboard
             </a>
           </li>
@@ -40,21 +40,15 @@
             </a>
             <ul class="collapse" id="productsSubMenu">
               <li style="list-style: none">
-                <span class="nav-link" th:href="@{/admin/products/add}">
+                <a class="nav-link" th:href="@{/admin/products/add}">
                   <i class="fas fa-plus" style="margin-right: 5px"></i
-                  >Add</span
+                  >Add</a
                 >
               </li>
               <li style="list-style: none">
-                <span class="nav-link" th:href="@{/admin/products}">
+                <a class="nav-link" th:href="@{/admin/products/list}">
                   <i class="fas fa-list-alt" style="margin-right: 5px"></i
-                  >List</span
-                >
-              </li>
-              <li style="list-style: none">
-                <span class="nav-link" th:href="@{/admin/products/searchpaginated}">
-                  <i class="fas fa-search-minus" style="margin-right: 5px"></i
-                  >Search</span
+                  >List</a
                 >
               </li>
             </ul>
@@ -78,21 +72,15 @@
                 >
               </li>
               <li style="list-style: none">
-                <a class="nav-link" th:href="@{/admin/categories}">
+                <a class="nav-link" th:href="@{/admin/categories/list}">
                   <i class="fas fa-list-alt" style="margin-right: 5px"></i
                   >List Category</a
-                >
-              </li>
-              <li style="list-style: none">
-                <a class="nav-link" th:href="@{/admin/categories/searchpaginated}">
-                  <i class="fas fa-search-minus" style="margin-right: 5px"></i
-                  >Search Category</a
                 >
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <span
+            <a
               class="nav-link"
               href="#"
               data-bs-toggle="collapse"
@@ -101,7 +89,7 @@
             >
               <span><i class="fas fa-industry"></i></span>
               Manufacturers
-            </span>
+            </a>
             <ul class="collapse" id="manufacturersSubMenu">
               <li style="list-style: none">
                 <a class="nav-link" th:href="@{/admin/manufacturers/add}">
@@ -110,24 +98,18 @@
                 >
               </li>
               <li style="list-style: none">
-                <a class="nav-link" th:href="@{/admin/manufacturers}">
+                <a class="nav-link" th:href="@{/admin/manufacturers/list}">
                   <i class="fas fa-list-alt" style="margin-right: 5px"></i
                   >List</a
-                >
-              </li>
-              <li style="list-style: none">
-                <a class="nav-link" th:href="@{/admin/manufacturers/searchpaginated}">
-                  <i class="fas fa-search-minus" style="margin-right: 5px"></i
-                  >Search</a
                 >
               </li>
             </ul>
           </li>
           <li class="nav-item">
-            <span class="nav-link" href="#">
+            <a class="nav-link" href="#">
               <span><i class="fas fa-users"></i></span>
               Customers
-            </span>
+            </a>
           </li>
        
           <li class="nav-item">

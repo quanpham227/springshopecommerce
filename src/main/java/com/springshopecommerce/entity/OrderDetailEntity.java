@@ -19,7 +19,7 @@ public class OrderDetailEntity extends AbstractEntity implements Serializable {
     @Column(nullable = false)
     private double unitPrice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 

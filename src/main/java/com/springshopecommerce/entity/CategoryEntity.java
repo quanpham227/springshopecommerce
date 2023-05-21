@@ -14,6 +14,7 @@ import java.util.List;
 public class CategoryEntity extends AbstractEntity {
 
     private String name;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<ProductEntity> products = new ArrayList<>();
 
@@ -21,9 +22,9 @@ public class CategoryEntity extends AbstractEntity {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String name, List<ProductEntity> products) {
+    public CategoryEntity(Long id, String name) {
+        super(id);
         this.name = name;
-        this.products = products;
     }
 
     public String getName() {

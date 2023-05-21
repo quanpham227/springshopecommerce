@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ICloudinaryService {
 
-    CloudinaryDTO upload(MultipartFile file);
+    CloudinaryDTO upload(MultipartFile file, String folderName);
 
     CloudinaryDTO update(String publicId , MultipartFile file);
 

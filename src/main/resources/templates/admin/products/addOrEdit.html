@@ -1,193 +1,259 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{admin/dashboardLayout.html}"
+    lang="en"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/dashboardLayout.html}"
 >
-  <head><style>
-  </style></head>
-  <body>
-    <section class="row" layout:fragment="content">
-      <div class="col mt-1">
-        <form action="/admin/products/saveOrUpdate" method="post" enctype="multipart/form-data" th:object="${product}">
-        <h1 class="h3 mb-2 text-gray-800 text-center">Add New Product</h1>
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-7">
-                <div class="form-group">
-                  <label for="id">Product ID</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    name="id"
-                    id="id"
-                    th:field="*{id}"
-                    aria-describedby="ProductHId"
-                    placeholder="Product Id"
-                  />
-                  <small id="ProductHId" class="form-text text-muted"
-                    >Product ID is Required</small
-                  >
-                </div>
-                <div class="form-group">
-                  <div class="row">
-                    <div class="col">
-                      <label for="categoryId">Category</label>
-                      <select class="form-control" name="categoryId" id="categoryId" th:field="*{categoryId}">
-                        <option th:each="item : ${categories}" th:value="${item.id}" th:text="${item.name}" 
-                        th:selected="${item.id == product.categoryId}">Category Name</option>
-                      </select>
-                    </div>
-                    <div class="col">
-                      <label for="manufacturerId">Manufacturer</label>
-                      <select class="form-control" name="manufacturerId" id="manufacturerId" th:field="*{manufacturerId}">
-                        <option th:each="item : ${manufacturers}" th:value="${item.id}" th:text="${item.name}" 
-                        th:selected="${item.id == product.manufacturerId}">Category Name</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="name">Product Name</label>
-                  <input
+    <head>
+        <style>
+            #image-preview img {
+                max-width: 100px;
+                max-height: 80px;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="row" layout:fragment="content">
+            <div class="row justify-content-center">
+                <div class="col-12 mt-2 bg-white shadow border">
+                    <form
+                        action="/admin/products/saveOrUpdate"
+                        method="post"
+                        enctype="multipart/form-data"
+                        th:object="${product}"
+                    >
+                        <div class="card-header bg-white justify-content-center">
+                            <h1 class="h3 mb-0 text-gray-800 text-center" th:if="${product.isEdit}">Update Products</h1>
+                            <h1 class="h3 mb-0 text-gray-800 text-center" th:unless="${product.isEdit}">
+                                Add Products
+                            </h1>
+                        </div>
 
-                    type="text"
-                    class="form-control"
-                    name="name"
-                    id="name"
-                    th:field="*{name}"
-                    aria-describedby="nameHId"
-                    placeholder="Product Name"
-                  />
-                  <small id="nameHId" class="form-text text-muted"
-                    >Product Name is Required</small
-                  >
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group">
+                                        <label for="id">Product ID</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="id"
+                                            id="id"
+                                            th:field="*{id}"
+                                            aria-describedby="ProductHId"
+                                            placeholder="Product Id"
+                                        />
+                                        <small id="ProductHId" class="form-text text-danger"
+                                            >Product ID is Required</small
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="categoryId">Category</label>
+                                                <select
+                                                    class="form-control"
+                                                    name="categoryId"
+                                                    id="categoryId"
+                                                    th:field="*{categoryId}"
+                                                >
+                                                    <option
+                                                        th:each="category : ${categories}"
+                                                        th:value="${category.id}"
+                                                        th:text="${category.name}"
+                                                        th:selected="${category.id == product.categoryId}"
+                                                    >
+                                                        Category Name
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label for="manufacturerId">Manufacturer</label>
+                                                <select
+                                                    class="form-control"
+                                                    name="manufacturerId"
+                                                    id="manufacturerId"
+                                                    th:field="*{manufacturerId}"
+                                                >
+                                                    <option
+                                                        th:each="item : ${manufacturers}"
+                                                        th:value="${item.id}"
+                                                        th:text="${item.name}"
+                                                        th:selected="${item.id == product.manufacturerId}"
+                                                    >
+                                                        Manufacturer Name
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Product Name</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="name"
+                                            id="name"
+                                            th:field="*{name}"
+                                            aria-describedby="nameHId"
+                                            placeholder="Product Name"
+                                            required
+                                        />
+                                        <small id="nameHId" class="form-text text-danger"
+                                            >Product Name is Required</small
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="quantity">Quantity</label>
+                                        <input
+                                            type="number"
+                                            class="form-control"
+                                            name="quantity"
+                                            id="quantity"
+                                            th:field="*{quantity}"
+                                            aria-describedby="quantityHId"
+                                            placeholder="Quantity"
+                                            required
+                                        />
+                                        <small id="quantityHId" class="form-text text-danger"
+                                            >Quantity Name is Required</small
+                                        >
+                                    </div>
+                                    <div class="input-group form-group">
+                                        <span class="input-group-text">Unit Price</span>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            id="price"
+                                            th:field="*{price}"
+                                            class="form-control"
+                                            placeholder=" Price"
+                                            required
+                                        />
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                </div>
+                                <div class="col-5 border-left">
+                                    <div class="form-group">
+                                        <div
+                                            class="d-flex overflow-auto"
+                                            id="image-preview"
+                                            th:unless="${product.isEdit}"
+                                        >
+                                            <img
+                                                id="image"
+                                                src="/images/no-image.jpg"
+                                                class="img-fluid rounded mr-2 mb-2"
+                                                alt="DefaultImage"
+                                            />
+                                        </div>
+                                        <div class="d-flex overflow-auto" id="image-preview" th:if="${product.isEdit}">
+                                            <img
+                                                th:each="productImage : ${products}"
+                                                th:src="${productImage.url}"
+                                                class="img-fluid rounded mr-2 mb-2"
+                                                alt="ProductImage"
+                                            />
+                                        </div>
+                                        <label class="mt-2" for="productImage">Image File</label>
+                                        <input
+                                            type="file"
+                                            class="form-control form-control-sm mt-3"
+                                            name="imageFile"
+                                            id="productImage"
+                                            accept="image/*"
+                                            onchange="previewImage(event)"
+                                            required
+                                            multiple
+                                        />
+                                        <small id="productImage" class="form-text text-danger"
+                                            >Product image is required</small
+                                        >
+                                    </div>
+                                    <div class="input-group form-group mt-3">
+                                        <span class="input-group-text">Discount</span>
+                                        <input
+                                            type="number"
+                                            name="discount"
+                                            id="discount"
+                                            th:field="*{discount}"
+                                            class="form-control"
+                                            placeholder="Discount"
+                                            required
+                                        />
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="status">Status</label>
+                                        <select class="form-control" name="status" id="status" th:field="*{status}">
+                                            <option
+                                                th:each="status : ${T(com.springshopecommerce.entity.ProductStatus).values()}"
+                                                th:value="${status}"
+                                                th:text="${status}"
+                                            ></option>
+                                        </select>
+                                    </div>
+                                    <script>
+                                        document.getElementById('productImage').addEventListener('change', function () {
+                                            var files = this.files;
+                                            if (files.length > 5) {
+                                                alert('Please select no more than 5 files');
+                                                this.value = '';
+                                                return false;
+                                            }
+                                            // Xóa hình ảnh cũ
+                                            document.getElementById('image-preview').innerHTML = '';
+                                            // Lặp qua các tệp được chọn
+                                            for (var i = 0; i < this.files.length; i++) {
+                                                // Tạo một thẻ img mới
+                                                var img = document.createElement('img');
+                                                img.src = URL.createObjectURL(this.files[i]);
+                                                img.className = 'img-fluid rounded mr-2 mb-2';
+                                                // Thêm thẻ img vào div image-preview
+                                                document.getElementById('image-preview').appendChild(img);
+                                            }
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea
+                                            class="form-control"
+                                            name="description"
+                                            id="description"
+                                            rows="10"
+                                            th:field="*{description}"
+                                            style="height: 200px"
+                                        ></textarea>
+                                        <script>
+                                            ClassicEditor.create(document.querySelector('#description')).catch(
+                                                (error) => {
+                                                    console.error(error);
+                                                },
+                                            );
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted bg-white d-flex justify-content-end">
+                            <div class="btn-group btn-sm ms-auto">
+                                <a class="btn btn-primary me-1 rounded" th:href="@{/admin/products/add}">New </a>
+                                <button
+                                    class="btn btn-sm btn-primary rounded"
+                                    th:text="${product.isEdit? 'Update' : 'Save'}"
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                  <label for="quantity">Quantity</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    name="quantity"
-                    id="quantity"
-                    th:field="*{quantity}"
-                    aria-describedby="quantityHId"
-                    placeholder="Quantity"
-                  />
-                  <small id="quantityHId" class="form-text text-muted"
-                    >Quantity Name is Required</small
-                  >
-                </div>
-                <div class="input-group form-group">
-                  <span class="input-group-text">Unit Price</span>
-                  <input
-                    type="number"
-                    name="unitPrice"
-                    id="unitPrice"
-                    th:field="*{unitPrice}"
-                    class="form-control"
-                    placeholder="Unit Price"
-                  />
-                  <span class="input-group-text">$</span>
-                </div>
-                
-                
-                
-              </div>
-              <div class="col-3 border-left ">
-                <div class="form-group">
-                  <div id="image-preview">
-                    <img id="image" src="/images/no-image.jpg" width="90%" class="img-fluid rounded mr-2 mb-2" alt="Default Image">
-                  </div>
-                  <label for="productImage">Image File</label>
-                  <input type="file" class="form-control-file" name="imageFile" id="productImage" accept="image/*" onchange="previewImage(event)" required>
-                  <small id="productImage" class="form-text text-muted">Product image is required</small>
-                  
-                </div>
-                <div class="input-group form-group">
-                  <span class="input-group-text">Discount</span>
-                  <input
-                    type="number"
-                    name="discount"
-                    id="discount"
-                    th:field="*{discount}"
-                    class="form-control"
-                    placeholder="Discount"
-                  />
-                  <span class="input-group-text">%</span>
-                </div>
-                <div class="form-group">
-                  <label for="status">Status</label>
-                  <select class="form-control" name="status" id="status" th:field="*{status}">
-                    <option value="0">InStock</option>
-                    <option value="1">Featured</option>
-                    <option value="3">OutOfStock</option>
-                    <option value="4">Discount</option>
-                    <option value="4">OnBackOrder</option>
-                  </select>
-                </div>
-                <script>
-                     function previewImage(event) {
-                      var preview = document.querySelector('#image-preview');
-                      preview.innerHTML = '';
-                      var file = event.target.files[0];
-                      var reader = new FileReader();
-
-                      reader.onloadend = function () {
-                        var img = document.createElement('img');
-                        img.src = reader.result;
-                        img.className = 'img-fluid rounded mr-2 mb-2';
-                        preview.appendChild(img);
-                      }
-
-                      if (file) {
-                        reader.readAsDataURL(file);
-                      } else {
-                        var img = document.createElement('img');
-                        img.src = '/images/no-image.jpg';
-                        img.width = '90%';
-                        img.className = 'img-fluid rounded mr-2 mb-2';
-                        preview.appendChild(img);
-                      }
-                    }
-                  // document.getElementById("productImage").addEventListener("change", function () {
-                  //     // Xóa hình ảnh cũ
-                  //     document.getElementById("image-preview").innerHTML = "";
-                  //     // Lặp qua các tệp được chọn
-                  //     for (var i = 0; i < this.files.length; i++) {
-                  //       // Tạo một thẻ img mới
-                  //       var img = document.createElement("img");
-                  //       img.src = URL.createObjectURL(this.files[i]);
-                  //       img.className = "img-fluid rounded mr-2 mb-2";
-                  //       // Thêm thẻ img vào div image-preview
-                  //       document.getElementById("image-preview").appendChild(img);
-                  //     }
-                  //   });
-                </script>
-              </div>
-              
             </div>
-            <div class="row">
-              <div class="col">
-                <div class="form-group">
-                  <label for="description">Description</label>
-                  <textarea class="form-control" name="description" id="description" rows="5" th:field="*{description}"></textarea>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer">
-            <a class="button btn btn-success">New </a>
-            <button class="button btn btn-primary">Save </button>
-            <a class="button btn btn-danger float-right">Delete </a>
-          </div>
-        </div>
-      </div>
-      
-    </form>
-    </section>
-  </body>
+        </section>
+    </body>
 </html>
-

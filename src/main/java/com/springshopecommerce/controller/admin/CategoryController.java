@@ -1,8 +1,6 @@
 package com.springshopecommerce.controller.admin;
 
 import com.springshopecommerce.dto.CategoryDTO;
-import com.springshopecommerce.entity.CategoryEntity;
-import com.springshopecommerce.repository.CategoryRepository;
 import com.springshopecommerce.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -37,57 +36,31 @@ public class CategoryController {
     }
     @GetMapping ("edit/{id}")
     public ModelAndView edit (ModelMap model, @PathVariable ("id") Long id){
-       Optional<CategoryDTO> category = Optional.ofNullable(categoryService.findByCategoryId(id));
-       CategoryDTO dto = new CategoryDTO();
-        if(category.isPresent()){
-            dto = category.get();
-            dto.setIsEdit(true);
-            model.addAttribute("category", dto);
-            return new ModelAndView("admin/categories/addOrEdit", model);
-        }
-        model.addAttribute("message","Category is not existed");
-        return new ModelAndView("forward:/admin/categories", model);
+        CategoryDTO category = categoryService.findByCategoryId(id);
+        category.setIsEdit(true);
+        model.addAttribute("category", category);
+        return new ModelAndView("admin/categories/addOrEdit", model);
+
     }
 
 
     @PostMapping("saveOrUpdate")
-    public ModelAndView saveOrUpdate (ModelMap model, @Valid @ModelAttribute("category")CategoryDTO categoryDTO , BindingResult result) {
+    public String saveOrUpdate ( @Valid @ModelAttribute("category")CategoryDTO categoryDTO ,
+                                      BindingResult result, RedirectAttributes redirectAttributes) {
         if(result.hasErrors()){
-            return new ModelAndView("admin/categories/addOrEdit");
+            return "admin/categories/addOrEdit";
         }
         if(categoryDTO.getId()== null){
-            CategoryDTO category = categoryService.findByCategoryName(categoryDTO.getName());
-            if(category.getId() != null){
-                model.addAttribute("message","Category already exists");
-            }else {
-                categoryService.createCategory(categoryDTO);
-                model.addAttribute("message","Category is save");
-            }
+            categoryService.createCategory(categoryDTO);
+            redirectAttributes.addFlashAttribute("message","Category is save");
         }else {
             categoryService.updateCategory(categoryDTO);
-            model.addAttribute("message","Category is update");
+            redirectAttributes.addFlashAttribute("message","Category is update");
         }
-        return new ModelAndView("forward:/admin/categories", model);
+        return "redirect:/admin/categories/list?name=";
     }
 
-    @RequestMapping ("")
-    public String list (ModelMap model) {
-        List<CategoryDTO> categories = categoryService.getAllCategories();
-        model.addAttribute("categories", categories);
-        return "/admin/categories/list";
-    }
-    @GetMapping ("search")
-    public String search (ModelMap model, @RequestParam(value = "name", required = false) String name) {
-        List<CategoryDTO> list = null;
-        if(StringUtils.hasText(name)){
-            list = categoryService.findByNameContaining(name);
-        }else {
-            list = categoryService.getAllCategories();
-        }
-        model.addAttribute("categories", list);
-        return "/admin/categories/search";
-    }
-    @GetMapping ("searchpaginated")
+    @GetMapping ("list")
     public String search (ModelMap model, @RequestParam(value = "name", required = false) String name,
                           @RequestParam ("page") Optional<Integer> page,
                           @RequestParam ("size") Optional<Integer> size) {
@@ -96,7 +69,7 @@ public class CategoryController {
         int pageSize = size.orElse(10);
 
         Pageable pageable = PageRequest.of(currentPage -1, pageSize, Sort.by("id"));
-        Page<CategoryEntity> resultPage = null;
+        Page<CategoryDTO> resultPage = null;
 
         if(StringUtils.hasText(name)){
             resultPage = categoryService.searchCategoryPaginged(name, pageable);
@@ -122,19 +95,14 @@ public class CategoryController {
 
 
         model.addAttribute("categoryPage", resultPage);
-        return "/admin/categories/searchpaginated";
+        return "/admin/categories/list";
     }
 
     @GetMapping("delete/{id}")
-    public ModelAndView delete (ModelMap model ,@PathVariable ("id") Long id){
-       if(id != null) {
-           categoryService.deleteCategoryById(id);
-           model.addAttribute("message", "category is deleted !");
-       }else {
-           model.addAttribute("message", "category is not found !");
-
-       }
-        return new ModelAndView("forward:/admin/categories", model);
+    public String delete ( @PathVariable ("id") Long id, RedirectAttributes redirectAttributes){
+        categoryService.deleteCategoryById(id);
+        redirectAttributes.addFlashAttribute("message","category is delete");
+        return "redirect:/admin/categories/list?name=";
     }
 
 }

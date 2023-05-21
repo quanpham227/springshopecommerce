@@ -1,5 +1,5 @@
 package com.springshopecommerce.entity;
 
 public enum ProductStatus {
-    InStock, OutOfStock, Discountinued, OnBackOrder
+    InStock, Featured, OutOfStock, Discount, OnBackOrder
 }

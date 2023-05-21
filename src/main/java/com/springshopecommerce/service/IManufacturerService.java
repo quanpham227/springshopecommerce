@@ -9,18 +9,18 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IManufacturerService {
-    List<ManufacturerDTO> getManufacturers();
+    List<ManufacturerDTO> getIdAndNameAndLogoManufacturer();
     ManufacturerDTO createManufacturer(ManufacturerDTO manufacturerDTO);
     ManufacturerDTO updateManufacturer(ManufacturerDTO manufacturerDTO);
 
-    ManufacturerDTO findByNameIgnoreCase ( String name);
+    ManufacturerDTO findManufacturerByNameIgnoreCase ( String name);
 
     ManufacturerDTO getManufacturerEntitiesById (Long id);
 
 
 
-    Page<ManufacturerEntity> searchManufacturersPaginged(String name, Pageable pageable);
-    Page<ManufacturerEntity> findAllManufacturersPaginged(Pageable pageable);
+    Page<ManufacturerDTO> searchManufacturersByName(String name, Pageable pageable);
+    Page<ManufacturerDTO> findAllManufacturers(Pageable pageable);
 
     void deleteManufacturerEntityById (Long id);
 }

@@ -1,8 +1,12 @@
 package com.springshopecommerce.controller.admin;
 
+import com.springshopecommerce.dto.CategoryDTO;
+import com.springshopecommerce.dto.ManufacturerDTO;
 import com.springshopecommerce.dto.ProductDTO;
-import com.springshopecommerce.entity.ProductEntity;
-import com.springshopecommerce.repository.ProductRepository;
+import com.springshopecommerce.dto.ProductImageDTO;
+import com.springshopecommerce.service.ICategoryService;
+import com.springshopecommerce.service.IManufacturerService;
+import com.springshopecommerce.service.IProductImageService;
 import com.springshopecommerce.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,67 +34,61 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+    @Autowired
+    private ICategoryService categoryService;
+    @Autowired
+    IManufacturerService manufacturerService;
 
+    @Autowired
+    private IProductImageService productImageService;
+
+
+    @ModelAttribute("categories")
+    public List<CategoryDTO> getCategories(){
+        return categoryService.getIdAndNameCategory();
+    }
+    @ModelAttribute("manufacturers")
+    public List<ManufacturerDTO> getManufactures(){
+        return manufacturerService.getIdAndNameAndLogoManufacturer();
+    }
 
     @GetMapping("add")
     public String add (Model model) {
-        model.addAttribute("product", new ProductDTO());
+        ProductDTO product = new ProductDTO();
+        product.setIsEdit(false);
+        model.addAttribute("product", product);
         return "admin/products/addOrEdit";
     }
     @GetMapping ("edit/{id}")
     public ModelAndView edit (ModelMap model, @PathVariable ("id") Long id){
-       Optional<ProductDTO> product = Optional.ofNullable(productService.findByProductId(id));
-       ProductDTO dto = new ProductDTO();
-        if(product.isPresent()){
-            dto = product.get();
-            dto.setIsEdit(true);
-            model.addAttribute("product", dto);
-            return new ModelAndView("admin/products/addOrEdit", model);
-        }
-        model.addAttribute("message","product is not existed");
-        return new ModelAndView("forward:/admin/products", model);
+        ProductDTO product = productService.findByProductId(id);
+        product.setIsEdit(true);
+        List<ProductImageDTO> products = productImageService.getProductImagesByProductId(id);
+
+        model.addAttribute("product", product);
+        model.addAttribute("products", products);
+
+        return new ModelAndView("admin/products/addOrEdit", model);
     }
 
 
     @PostMapping("saveOrUpdate")
-    public ModelAndView saveOrUpdate (ModelMap model, @Valid @ModelAttribute("products")ProductDTO productDTO , BindingResult result) {
+    public String saveOrUpdate ( @Valid @ModelAttribute("product")ProductDTO productDTO ,
+                                BindingResult result, RedirectAttributes redirectAttributes) {
         if(result.hasErrors()){
-            return new ModelAndView("admin/products/addOrEdit");
+            return "admin/products/addOrEdit";
         }
         if(productDTO.getId()== null){
-            ProductDTO product = productService.findByProductName(productDTO.getName());
-            if(product.getId() != null){
-                model.addAttribute("message","product already exists");
-            }else {
                 productService.createProduct(productDTO);
-                model.addAttribute("message","product is save");
-            }
+            redirectAttributes.addFlashAttribute("message","Product is save");
         }else {
             productService.updateProduct(productDTO);
-            model.addAttribute("message","product is update");
+            redirectAttributes.addFlashAttribute("message","Product is update");
         }
-        return new ModelAndView("forward:/admin/products", model);
+        return "redirect:/admin/products/list?name=";
     }
-
-    @RequestMapping ("")
-    public String list (ModelMap model) {
-        List<ProductDTO> products = productService.getAllProducts();
-        model.addAttribute("products", products);
-        return "/admin/products/list";
-    }
-    @GetMapping ("search")
-    public String search (ModelMap model, @RequestParam(value = "name", required = false) String name) {
-        List<ProductDTO> list = null;
-        if(StringUtils.hasText(name)){
-            list = productService.findByNameContaining(name);
-        }else {
-            list = productService.getAllProducts();
-        }
-        model.addAttribute("products", list);
-        return "/admin/products/search";
-    }
-    @GetMapping ("searchpaginated")
-    public String search (ModelMap model, @RequestParam(value = "name", required = false) String name,
+    @GetMapping ("list")
+    public String listProducts (ModelMap model, @RequestParam(value = "name", required = false) String name,
                           @RequestParam ("page") Optional<Integer> page,
                           @RequestParam ("size") Optional<Integer> size) {
 
@@ -97,13 +96,13 @@ public class ProductController {
         int pageSize = size.orElse(10);
 
         Pageable pageable = PageRequest.of(currentPage -1, pageSize, Sort.by("name"));
-        Page<ProductEntity> resultPage = null;
+        Page<ProductDTO> resultPage = null;
 
         if(StringUtils.hasText(name)){
-            resultPage = productService.searchProductPaginged(name, pageable);
+            resultPage = productService.findByNameContainsIgnoreCase(name, pageable);
             model.addAttribute("name",name);
         }else {
-            resultPage = productService.findAllPaginged(pageable);
+            resultPage = productService.findAllProductsPaginged(pageable);
         }
 
         int totalPages = resultPage.getTotalPages();
@@ -123,19 +122,14 @@ public class ProductController {
 
 
         model.addAttribute("productPage", resultPage);
-        return "/admin/products/searchpaginated";
+        return "/admin/products/listProducts";
     }
 
     @GetMapping("delete/{id}")
-    public ModelAndView delete (ModelMap model ,@PathVariable ("id") Long id){
-       if(id != null) {
-           productService.deleteProductById(id);
-           model.addAttribute("message", "product is deleted !");
-       }else {
-           model.addAttribute("message", "product is not found !");
-
-       }
-        return new ModelAndView("forward:/admin/products/search", model);
+    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        productService.deleteProductById(id);
+        redirectAttributes.addFlashAttribute("message", "product is deleted!");
+        return "redirect:/admin/products/list?name=";
     }
 
 }

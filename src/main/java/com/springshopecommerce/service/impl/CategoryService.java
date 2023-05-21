@@ -2,6 +2,7 @@ package com.springshopecommerce.service.impl;
 
 import com.springshopecommerce.dto.CategoryDTO;
 import com.springshopecommerce.entity.CategoryEntity;
+import com.springshopecommerce.exception.NotFoundException;
 import com.springshopecommerce.repository.CategoryRepository;
 import com.springshopecommerce.service.ICategoryService;
 import org.modelmapper.ModelMapper;
@@ -19,73 +20,71 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService implements ICategoryService {
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
-        List<CategoryDTO> categories = categoryRepository.getAllCategories().stream()
-                .map(CategoryEntity -> modelMapper.map(CategoryEntity,CategoryDTO.class))
-                .collect(Collectors.toList());
+    public List<CategoryDTO> getIdAndNameCategory() {
+        List<CategoryDTO> categories = categoryRepository.getIdAndNameCategory();
         return categories;
     }
 
     @Override
-    public Page<CategoryEntity> searchCategoryPaginged(String name, Pageable pageable) {
-        return categoryRepository.searchCategoryPaginged(name, pageable);
+    public Page<CategoryDTO> searchCategoryPaginged(String name, Pageable pageable) {
+        Page<CategoryDTO> CategoryDTOPage = categoryRepository.searchCategoryPaginged(name, pageable);
+        return CategoryDTOPage;
     }
 
     @Override
-    public Page<CategoryEntity> findAllPaginged(Pageable pageable) {
-        return categoryRepository.findAllPaginged( pageable);
+    public Page<CategoryDTO> findAllPaginged(Pageable pageable) {
+        Page<CategoryDTO> CategoryDTOPage = categoryRepository.findAllPaginged( pageable);
+        return CategoryDTOPage;
     }
 
     @Override
     public CategoryDTO findByCategoryId(Long id) {
-        CategoryEntity categoryEntity = categoryRepository.findByCategoryId(id);
-        return modelMapper.map(categoryEntity, CategoryDTO.class);
+        CategoryDTO categoryDTO = this.categoryRepository.findByCategoryId(id)
+                .orElseThrow(()->new NotFoundException("Category not found"));
+        return categoryDTO;
     }
 
     @Override
-    public CategoryDTO findByCategoryName(String name) {
-        Optional<CategoryEntity> categoryEntityOptional = categoryRepository.findByCategoryName(name);
-
-       if(categoryEntityOptional.isPresent()){
-           CategoryEntity categoryEntity = categoryEntityOptional.get();
-           return modelMapper.map(categoryEntity, CategoryDTO.class);
-       }else {
-           return new CategoryDTO();
-       }
-    }
-
-    @Override
-    public List<CategoryDTO> findByNameContaining(String name) {
-        List<CategoryDTO>  categoryDTOList = categoryRepository.findByNameContaining(name)
-                .stream().map(CategoryEntity -> modelMapper.map(CategoryEntity, CategoryDTO.class))
-                .collect(Collectors.toList());
-        return categoryDTOList;
+    public CategoryDTO getIdAndNameCategoryById(Long id) {
+        CategoryDTO categoryDTO = categoryRepository.getIdAndNameCategoryById(id);
+        return categoryDTO;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        CategoryEntity categoryEntity = modelMapper.map(categoryDTO, CategoryEntity.class);
-        return modelMapper.map(categoryRepository.save(categoryEntity), CategoryDTO.class);
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setId(categoryDTO.getId());
+        categoryEntity.setName(categoryDTO.getName());
+        CategoryEntity categorySave = categoryRepository.save(categoryEntity);
+        CategoryDTO  category = new CategoryDTO();
+        category.setId(categorySave.getId());
+        category.setName(categorySave.getName());
+        return categoryDTO;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-        CategoryEntity categoryEntityOld = this.categoryRepository.findByCategoryId(categoryDTO.getId());
-        this.modelMapper.map(categoryDTO, categoryEntityOld);
-        return modelMapper.map(this.categoryRepository.save(categoryEntityOld), CategoryDTO.class);
+        CategoryEntity categoryOptional = categoryRepository.findByCategoryIdForUpdate(categoryDTO.getId())
+                .orElseThrow(()->new NotFoundException("Category not found "));
+
+        categoryOptional.setName(categoryDTO.getName());
+        CategoryEntity category = categoryRepository.save(categoryOptional);
+        CategoryDTO categoryResponse = new CategoryDTO();
+        categoryResponse.setId(category.getId());
+        categoryResponse.setName(category.getName());
+        return categoryResponse;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteCategoryById(Long id) {
+        CategoryDTO categoryDTO = this.categoryRepository.findByCategoryId(id)
+                .orElseThrow(() -> new NotFoundException("cannot find category with id :" + id ));
         categoryRepository.deleteCategoryById(id);
     }
 }
