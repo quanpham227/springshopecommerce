@@ -16,7 +16,7 @@ import java.util.*;
 @Entity
 @Table(name = "product")
 public class ProductEntity extends AbstractEntity {
-    @Column(name = "name", columnDefinition = "nvarchar(100) not null")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "quantity")
@@ -25,7 +25,7 @@ public class ProductEntity extends AbstractEntity {
     @Column(name = "unitPrice")
     private BigDecimal price;
 
-    @Column(name = "description", columnDefinition = "nvarchar(500) not null")
+    @Column(name = "description",columnDefinition = "TEXT")
     private String description;
 
 

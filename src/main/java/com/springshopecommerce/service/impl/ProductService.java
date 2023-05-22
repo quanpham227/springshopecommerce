@@ -137,7 +137,6 @@ public class ProductService implements IProductService {
 
 
     @Override
-
     public ProductDTO updateProduct(ProductDTO productDTO) {
         // Sao chép giá trị ban đầu
         ProductEntity originalProductEntity = productRepository.findProductEntitiesById(productDTO.getId())

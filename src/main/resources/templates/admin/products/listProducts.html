@@ -12,7 +12,7 @@
                 <div class="card-header bg-white">
                     <h1 class="h3 mb-0 text-gray-800 text-center">List Products</h1>
                 </div>
-                <div th:if="${message != null}" class="alert alert-success" role="alert">
+                <div th:if="${message != null}" class="alert alert-success text-center" role="alert">
                     <i>[[${message}]]</i>
                 </div>
                 <div class="row" th:if="${!productPage.hasContent()}">
@@ -78,7 +78,7 @@
                                             height="30px"
                                         />
                                     </td>
-                                    <td>[[${product.id}]]</td>
+                                    <td th:text="${product.id}"></td>
                                     <td th:text="${product.name}"></td>
                                     <td th:text="${product.quantity}"></td>
                                     <td th:text="${product.price}"></td>
@@ -98,15 +98,56 @@
                                             ><i class="fas fa-pen"></i
                                         ></a>
                                         <a
-                                            th:href="@{'/admin/products/delete/' + ${product.id}}"
+                                            th:data-id="${product.id}"
+                                            th:data-name="${product.name}"
+                                            onclick="showConfirmModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
                                             title="Delete"
                                             data-toggle="tooltip"
-                                            ><i class="fas fa-trash"></i
+                                            ><i class="fas fa-trash text-danger"></i
                                         ></a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+
+                        <!-- Modal Body -->
+                        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                        <div
+                            class="modal fade"
+                            id="confirmationId"
+                            tabindex="-1"
+                            data-bs-backdrop="static"
+                            data-bs-keyboard="false"
+                            role="dialog"
+                            aria-labelledby="modalTitleId"
+                            aria-hidden="true"
+                        >
+                            <div
+                                class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+                                role="document"
+                            >
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalTitleId">Confirmation</h5>
+                                        <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Do you want to delete "<span id="productName"></span>"?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a id="yesOption" type="button" class="btn btn-danger">Yes</a>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            No
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row card-footer text-muted bg-white justify-content-start">
                         <div class="col-2">
@@ -167,3 +208,10 @@
         </div>
     </body>
 </html>
+<script>
+    function showConfirmModalDialog(id, name) {
+        $('#productName').text(name);
+        $('#yesOption').attr('href', '/admin/products/delete/' + id);
+        $('#confirmationId').modal('show');
+    }
+</script>

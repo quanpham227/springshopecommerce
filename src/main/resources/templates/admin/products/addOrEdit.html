@@ -43,6 +43,7 @@
                                             th:field="*{id}"
                                             aria-describedby="ProductHId"
                                             placeholder="Product Id"
+                                            readonly
                                         />
                                         <small id="ProductHId" class="form-text text-danger"
                                             >Product ID is Required</small
@@ -225,16 +226,12 @@
                                             class="form-control"
                                             name="description"
                                             id="description"
-                                            rows="10"
                                             th:field="*{description}"
-                                            style="height: 200px"
+                                            style="height: 500px"
                                         ></textarea>
+
                                         <script>
-                                            ClassicEditor.create(document.querySelector('#description')).catch(
-                                                (error) => {
-                                                    console.error(error);
-                                                },
-                                            );
+                                            CKEDITOR.replace('description');
                                         </script>
                                     </div>
                                 </div>

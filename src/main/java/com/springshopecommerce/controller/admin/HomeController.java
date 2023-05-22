@@ -12,8 +12,8 @@ public class HomeController {
     public ModelAndView home (){
         return new ModelAndView("admin/dashboard");
     }
-    @GetMapping("404")
-    public ModelAndView notFound (){
-        return new ModelAndView("admin/errors/404");
+    @RequestMapping(value = "/**")
+    public String handleNotFound() {
+        return "admin/errors/404";
     }
 }

@@ -29,7 +29,7 @@ public class ManufacturerEntity extends AbstractEntity {
     private String publicId;
 
 
-    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "manufacturer", fetch = FetchType.LAZY)
     private List<ProductEntity> products = new ArrayList<>();
 
 

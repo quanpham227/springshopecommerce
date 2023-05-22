@@ -55,7 +55,6 @@ public class ProductController {
     @GetMapping("add")
     public String add (Model model) {
         ProductDTO product = new ProductDTO();
-        product.setIsEdit(false);
         model.addAttribute("product", product);
         return "admin/products/addOrEdit";
     }
