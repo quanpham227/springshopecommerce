@@ -18,9 +18,6 @@ import java.util.List;
 public class OrderEntity extends AbstractEntity implements Serializable {
 
     @Temporal(TemporalType.DATE)
-    private Date orderDate;
-
-    @Temporal(TemporalType.DATE)
     @Column(name = "shipping_date")
     private Date shippingDate;
 
@@ -59,6 +56,8 @@ public class OrderEntity extends AbstractEntity implements Serializable {
     }
 
 
-
-
+    @PrePersist
+    public void prePersist() {
+        createDate = new Date();
+    }
 }
