@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -19,14 +20,28 @@ public class ProductEntity extends AbstractEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "cpu")
+    private String cpu;
+
+    @Column(name = "ram")
+    private String ram;
+
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "screensize")
+    private String screenSize;
+
+
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "unitPrice")
+    @Column(name = "unitPrice", precision = 11, scale = 2)
     private BigDecimal price;
 
     @Column(name = "description",columnDefinition = "TEXT")
     private String description;
+
 
 
     @Column(name = "discount")
@@ -73,27 +88,15 @@ public class ProductEntity extends AbstractEntity {
     public void prePersist() {
         createDate = new Date();
     }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductEntity product = (ProductEntity) o;
-        return Objects.equals(getId(), product.getId()) &&
-                Objects.equals(getName(), product.getName()) &&
-                Objects.equals(getPrice(), product.getPrice()) &&
-                Objects.equals(getDescription(), product.getDescription()) &&
-                Objects.equals(getCategory(), product.getCategory()) &&
-                Objects.equals(getManufacturer(), product.getManufacturer());
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getPrice(), getDescription(), getCategory(), getManufacturer());
-    }
 
-    public ProductEntity(Long id, String name, int quantity, BigDecimal price, String description, Float discount, ProductStatus status,Date createDate, Date updateDate, ProductImageEntity image, CategoryEntity category,  ManufacturerEntity manufacturer) {
+    public ProductEntity(Long id, String name,String cpu, String ram, String color, String screenSize, int quantity, BigDecimal price, String description, Float discount, ProductStatus status,Date createDate, Date updateDate, ProductImageEntity image, CategoryEntity category,  ManufacturerEntity manufacturer) {
         super(id);
         this.name = name;
+        this.cpu = cpu;
+        this.ram = ram;
+        this.color = color;
+        this.screenSize = screenSize;
         this.quantity = quantity;
         this.price = price;
         this.description = description;
@@ -104,5 +107,18 @@ public class ProductEntity extends AbstractEntity {
         this.manufacturer = manufacturer;
         this.createDate = createDate;
         this.updateDate = updateDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ProductEntity that = (ProductEntity) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

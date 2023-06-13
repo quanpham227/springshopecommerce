@@ -11,33 +11,22 @@
         <link href="/admins/assets/dist/css/bootstrap.min.css" rel="stylesheet" />
         <!-- <script src="feather.min.js"></script> -->
         <link href="/admins/css/dashboard.css" rel="stylesheet" />
-        <link rel="stylesheet" href="/admin/fontawesome-free-5.15.4-web/css/all.min.css" />
+        <link href="/admins/css/dashboard.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/admins/ti-icons/css/themify-icons.css" />
+
+        <link rel="stylesheet" href="/admins/fontawesome/css/all.min.css" />
         <script src="/admins/ckeditor/ckeditor.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <style>
-            .bd-placeholder-img {
-                font-size: 1.125rem;
-                text-anchor: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
-            }
-
-            @media (min-width: 768px) {
-                .bd-placeholder-img-lg {
-                    font-size: 3.5rem;
-                }
-            }
-        </style>
+        <style></style>
     </head>
     <body>
         <div th:replace="admin/fragments/nav:: nav"></div>
         <div class="container-fluid">
             <div class="row">
                 <div id="sidebar" th:replace="admin/fragments/sidebar:: sidebar"></div>
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div layout:fragment="content" class="content mx-2 my-2 shadow" style="min-height: 88vh"></div>
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="min-height: 88vh">
+                    <div layout:fragment="content" class="content mx-2 my-2 shadow"></div>
                 </main>
             </div>
         </div>

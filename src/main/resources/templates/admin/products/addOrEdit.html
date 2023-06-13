@@ -105,34 +105,45 @@
                                             >Product Name is Required</small
                                         >
                                     </div>
-                                    <div class="form-group">
-                                        <label for="quantity">Quantity</label>
-                                        <input
-                                            type="number"
-                                            class="form-control"
-                                            name="quantity"
-                                            id="quantity"
-                                            th:field="*{quantity}"
-                                            aria-describedby="quantityHId"
-                                            placeholder="Quantity"
-                                            required
-                                        />
-                                        <small id="quantityHId" class="form-text text-danger"
-                                            >Quantity Name is Required</small
-                                        >
+                                    <div class="row form-group mt-2">
+                                        <div class="col">
+                                            <label for="cpu">CPU</label>
+                                            <select class="form-control" name="cpu" th:field="*{cpu}">
+                                                <option value="apple">Apple</option>
+                                                <option value="Core i3">Core i3</option>
+                                                <option value="Core i5">Core i5</option>
+                                                <option value="Core i7">Core i7</option>
+                                                <option value="Core i9">Core i9</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label for="ram">RAM</label>
+                                            <select class="form-control" name="ram" th:field="*{ram}">
+                                                <option value="4Gb">4Gb</option>
+                                                <option value="8Gb">8Gb</option>
+                                                <option value="16Gb">16Gb</option>
+                                                <option value="32Gb">32Gb</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="input-group form-group">
-                                        <span class="input-group-text">Unit Price</span>
-                                        <input
-                                            type="number"
-                                            name="price"
-                                            id="price"
-                                            th:field="*{price}"
-                                            class="form-control"
-                                            placeholder=" Price"
-                                            required
-                                        />
-                                        <span class="input-group-text">$</span>
+                                    <div class="row form-group mt-2">
+                                        <div class="col">
+                                            <label for="screenSize">Size Screen</label>
+                                            <select class="form-control" name="screenSize" th:field="*{screenSize}">
+                                                <option value="13">13"</option>
+                                                <option value="14">14"</option>
+                                                <option value="15.6">15.6"</option>
+                                                <option value="17">17"</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label for="color">Color</label>
+                                            <select class="form-control" name="color" th:field="*{color}">
+                                                <option value="black">Black</option>
+                                                <option value="white">White</option>
+                                                <option value="gold">Gold</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-5 border-left">
@@ -144,7 +155,7 @@
                                         >
                                             <img
                                                 id="image"
-                                                src="/images/no-image.jpg"
+                                                src="/admins/images/no-image.jpg"
                                                 class="img-fluid rounded mr-2 mb-2"
                                                 alt="DefaultImage"
                                             />
@@ -172,10 +183,25 @@
                                             >Product image is required</small
                                         >
                                     </div>
+
+                                    <div class="input-group form-group mt-2">
+                                        <span class="input-group-text">Unit Price</span>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            id="price"
+                                            th:field="*{price}"
+                                            class="form-control"
+                                            placeholder=" Price"
+                                            required
+                                        />
+                                        <span class="input-group-text">$</span>
+                                    </div>
                                     <div class="input-group form-group mt-3">
                                         <span class="input-group-text">Discount</span>
                                         <input
                                             type="number"
+                                            step="any"
                                             name="discount"
                                             id="discount"
                                             th:field="*{discount}"
@@ -185,16 +211,44 @@
                                         />
                                         <span class="input-group-text">%</span>
                                     </div>
-                                    <div class="form-group mt-3">
-                                        <label for="status">Status</label>
-                                        <select class="form-control" name="status" id="status" th:field="*{status}">
-                                            <option
-                                                th:each="status : ${T(com.springshopecommerce.entity.ProductStatus).values()}"
-                                                th:value="${status}"
-                                                th:text="${status}"
-                                            ></option>
-                                        </select>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group mt-3">
+                                                <label for="status">Status</label>
+                                                <select
+                                                    class="form-control"
+                                                    name="status"
+                                                    id="status"
+                                                    th:field="*{status}"
+                                                >
+                                                    <option
+                                                        th:each="status : ${T(com.springshopecommerce.entity.ProductStatus).values()}"
+                                                        th:value="${status}"
+                                                        th:text="${status}"
+                                                    ></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group mt-3">
+                                                <label for="quantity">Quantity</label>
+                                                <input
+                                                    type="number"
+                                                    class="form-control"
+                                                    name="quantity"
+                                                    id="quantity"
+                                                    th:field="*{quantity}"
+                                                    aria-describedby="quantityHId"
+                                                    placeholder="Quantity"
+                                                    required
+                                                />
+                                                <small id="quantityHId" class="form-text text-danger"
+                                                    >Quantity Name is Required</small
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <script>
                                         document.getElementById('productImage').addEventListener('change', function () {
                                             var files = this.files;

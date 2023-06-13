@@ -8,10 +8,7 @@ import com.springshopecommerce.exception.CloudinaryException;
 import com.springshopecommerce.exception.ImageProcessingException;
 import com.springshopecommerce.exception.NotFoundException;
 import com.springshopecommerce.exception.UpdateProductException;
-import com.springshopecommerce.repository.CategoryRepository;
-import com.springshopecommerce.repository.ManufacturerRepository;
-import com.springshopecommerce.repository.ProductImageRepository;
-import com.springshopecommerce.repository.ProductRepository;
+import com.springshopecommerce.repository.*;
 import com.springshopecommerce.service.ICloudinaryService;
 import com.springshopecommerce.service.IProductService;
 import com.springshopecommerce.utils.ProductUtils;
@@ -20,7 +17,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +35,9 @@ import java.util.stream.Collectors;
 public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductRepositoryImpl filterProducts;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -50,7 +52,28 @@ public class ProductService implements IProductService {
     @Autowired
     private ManufacturerRepository manufacturerRepository;
 
+    private final int productsPerPage = 10; // Số lượng sản phẩm hiển thị mỗi lần
+    @Override
+    public List<ProductDTO> getAllProducts() {
+        return productRepository.getAllProducts();
+    }
 
+    @Override
+    public List<ProductDTO> getProductsByNameAndPage(String name, Pageable pageable) {
+
+        return productRepository.getProductsByNameAndPage(name, pageable);
+    }
+
+    @Override
+    public List<ProductDTO> filterProducts(List<Long> manufacturers, List<String> cpus, List<String> rams,List<String> colors, List<String> screenSizes, String name, Pageable pageable) {
+        List<ProductDTO> products = filterProducts.filterProducts(manufacturers,cpus,rams,colors,screenSizes,name, pageable);
+        return products;
+    }
+
+    @Override
+    public List<ProductDTO> getFilteredProducts(Long manufacturerId, String cpu, String ram, String color, String screenSize) {
+        return null;
+    }
 
     @Override
     public Page<ProductDTO> findByNameContainsIgnoreCase(String name, Pageable pageable) {
@@ -103,11 +126,16 @@ public class ProductService implements IProductService {
 
         productEntity.setId(productDTO.getId());
         productEntity.setName(productDTO.getName());
+        productEntity.setCpu(productDTO.getCpu());
+        productEntity.setRam(productDTO.getRam());
+        productEntity.setColor(productDTO.getColor());
+        productEntity.setScreenSize(productDTO.getScreenSize());
         productEntity.setQuantity(productDTO.getQuantity());
         productEntity.setPrice(productDTO.getPrice());
         productEntity.setDescription(productDTO.getDescription());
         productEntity.setDiscount(productDTO.getDiscount());
         productEntity.setStatus(productDTO.getStatus());
+
 
 
         // Thiết lập ManufacturerEntity cho ProductEntity
@@ -157,6 +185,18 @@ public class ProductService implements IProductService {
             }
             productEntity.setQuantity(productDTO.getQuantity());
 
+            if (productDTO.getCpu() != null) {
+                productEntity.setCpu(productDTO.getCpu());
+            }
+            if (productDTO.getRam() != null) {
+                productEntity.setRam(productDTO.getRam());
+            }
+            if (productDTO.getColor() != null) {
+                productEntity.setColor(productDTO.getColor());
+            }
+            if (productDTO.getScreenSize() != null) {
+                productEntity.setScreenSize(productDTO.getScreenSize());
+            }
             if (productDTO.getPrice() != null) {
                 productEntity.setPrice(productDTO.getPrice());
             }
