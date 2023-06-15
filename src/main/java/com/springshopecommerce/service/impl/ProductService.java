@@ -2,7 +2,6 @@ package com.springshopecommerce.service.impl;
 
 import com.springshopecommerce.dto.CloudinaryDTO;
 import com.springshopecommerce.dto.ProductDTO;
-import com.springshopecommerce.dto.ProductImageDTO;
 import com.springshopecommerce.entity.*;
 import com.springshopecommerce.exception.CloudinaryException;
 import com.springshopecommerce.exception.ImageProcessingException;
@@ -11,20 +10,15 @@ import com.springshopecommerce.exception.UpdateProductException;
 import com.springshopecommerce.repository.*;
 import com.springshopecommerce.service.ICloudinaryService;
 import com.springshopecommerce.service.IProductService;
-import com.springshopecommerce.utils.ProductUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -52,7 +46,6 @@ public class ProductService implements IProductService {
     @Autowired
     private ManufacturerRepository manufacturerRepository;
 
-    private final int productsPerPage = 10; // Số lượng sản phẩm hiển thị mỗi lần
     @Override
     public List<ProductDTO> getAllProducts() {
         return productRepository.getAllProducts();

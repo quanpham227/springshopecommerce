@@ -25,7 +25,11 @@ public interface ManufacturerRepository extends JpaRepository<ManufacturerEntity
     @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl) " +
             "FROM ManufacturerEntity m ")
     Page<ManufacturerDTO> findAllManufacturers(Pageable pageable);
-
+    @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl, COUNT(p)) " +
+            "FROM ManufacturerEntity m " +
+            "LEFT JOIN m.products p " +
+            "GROUP BY m.id")
+    List<ManufacturerDTO> getIdNameLogoAndProductCount();
     @Query("SELECT new com.springshopecommerce.dto.ManufacturerDTO(m.id, m.name, m.logoUrl) " +
             "FROM ManufacturerEntity m " +
             "WHERE LOWER(m.name) LIKE LOWER(concat('%', :name, '%'))")

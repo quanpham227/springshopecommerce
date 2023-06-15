@@ -19,7 +19,7 @@ public class ManufacturerRestController {
 
     @GetMapping()
     public List<ManufacturerDTO> getManufacturers(){
-        return manufacturerService.getIdAndNameAndLogoManufacturer();
+        return manufacturerService.getIdNameLogoAndProductCount();
     }
 
 }

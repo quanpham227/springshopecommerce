@@ -32,6 +32,12 @@ public class ManufacturerService implements IManufacturerService {
     }
 
     @Override
+    public List<ManufacturerDTO> getIdNameLogoAndProductCount() {
+        List<ManufacturerDTO> manufacturers = manufacturerRepository.getIdNameLogoAndProductCount();
+        return manufacturers;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ManufacturerDTO createManufacturer(ManufacturerDTO manufacturerDTO) {
         String folderName = "manufacturers";

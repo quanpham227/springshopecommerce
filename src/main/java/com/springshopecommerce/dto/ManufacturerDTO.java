@@ -26,6 +26,8 @@ public class ManufacturerDTO extends AbstractDTO<ManufacturerDTO> implements Ser
 
     private String fileName;
 
+    private Long productCount;
+
     @JsonIgnore
     private MultipartFile logoFile;
 
@@ -54,5 +56,12 @@ public class ManufacturerDTO extends AbstractDTO<ManufacturerDTO> implements Ser
         this.name = name;
         this.logoUrl = logoUrl;
         this.fileName = fileName;
+    }
+
+    public ManufacturerDTO(Long id, String name, String logoUrl, Long productCount) {
+        super(id);
+        this.name = name;
+        this.logoUrl = logoUrl;
+        this.productCount = productCount;
     }
 }

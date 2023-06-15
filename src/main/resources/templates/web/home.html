@@ -24,245 +24,231 @@
                         </button>
                         <div class="collapse d-lg-block mb-2" id="sidebar">
                             <div class="accordion" id="accordionSideBar">
-                                <form>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingBrands">
-                                            <button
-                                                class="accordion-button"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#collapseBrands"
-                                                aria-expanded="true"
-                                                aria-controls="collapseBrands"
-                                            >
-                                                Brands
-                                            </button>
-                                        </h2>
-                                        <div
-                                            id="collapseBrands"
-                                            class="accordion-collapse collapse show"
-                                            aria-labelledby="headingBrands"
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingBrands">
+                                        <button
+                                            class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseBrands"
+                                            aria-expanded="true"
+                                            aria-controls="collapseBrands"
                                         >
-                                            <div class="accordion-body">
-                                                <ul id="manufacturer-list"></ul>
-                                            </div>
+                                            Brands
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="collapseBrands"
+                                        class="accordion-collapse collapse show"
+                                        aria-labelledby="headingBrands"
+                                    >
+                                        <div class="accordion-body">
+                                            <ul id="manufacturer-list">
+                                                <li>
+                                                    <input type="checkbox" name="manufacturer" value="12" />
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="manufacturer" value="2" />
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="manufacturer" value="3" />
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="manufacturer" value="4" />
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingColors">
-                                            <button
-                                                class="accordion-button"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#collapseColors"
-                                                aria-expanded="false"
-                                                aria-controls="collapseColors"
-                                                style="height: 30px"
-                                            >
-                                                Colors
-                                            </button>
-                                        </h2>
-                                        <div
-                                            id="collapseColors"
-                                            class="accordion-collapse collapse show"
-                                            aria-labelledby="headingColors"
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingColors">
+                                        <button
+                                            class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseColors"
+                                            aria-expanded="false"
+                                            aria-controls="collapseColors"
+                                            style="height: 30px"
                                         >
-                                            <div class="accordion-body">
-                                                <ul>
-                                                    <li>
-                                                        <label class="color-checkbox" for="black">
-                                                            <input
-                                                                name="color"
-                                                                type="checkbox"
-                                                                id="black"
-                                                                value="black"
-                                                                data-filter="black"
-                                                            />
-                                                            <div class="color-box black"></div>
-                                                            <span class="color-label">Black</span>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <label class="color-checkbox" for="white">
-                                                            <input
-                                                                name="color"
-                                                                type="checkbox"
-                                                                id="white"
-                                                                value="white"
-                                                                data-filter="white"
-                                                            />
-                                                            <div class="color-box white"></div>
-                                                            <span class="color-label">White</span>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <label class="color-checkbox" for="gold">
-                                                            <input
-                                                                name="color"
-                                                                type="checkbox"
-                                                                id="gold"
-                                                                value="gold"
-                                                            />
-                                                            <div class="color-box gold"></div>
-                                                            <span class="color-label">Gold</span>
-                                                        </label>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            Colors
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="collapseColors"
+                                        class="accordion-collapse collapse show"
+                                        aria-labelledby="headingColors"
+                                    >
+                                        <div class="accordion-body">
+                                            <ul>
+                                                <li>
+                                                    <label class="color-checkbox" for="black">
+                                                        <input
+                                                            name="color"
+                                                            type="checkbox"
+                                                            id="black"
+                                                            value="black"
+                                                            data-filter="black"
+                                                        />
+                                                        <div class="color-box black"></div>
+                                                        <span class="color-label">Black</span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="color-checkbox" for="white">
+                                                        <input
+                                                            name="color"
+                                                            type="checkbox"
+                                                            id="white"
+                                                            value="white"
+                                                            data-filter="white"
+                                                        />
+                                                        <div class="color-box white"></div>
+                                                        <span class="color-label">White</span>
+                                                    </label>
+                                                </li>
+                                                <li>
+                                                    <label class="color-checkbox" for="gold">
+                                                        <input name="color" type="checkbox" id="gold" value="gold" />
+                                                        <div class="color-box gold"></div>
+                                                        <span class="color-label">Gold</span>
+                                                    </label>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingCPU">
-                                            <button
-                                                class="accordion-button collapsed"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#panelsStayOpen-collapseCPU"
-                                                aria-expanded="false"
-                                                aria-controls="panelsStayOpen-collapseCPU"
-                                            >
-                                                CPU
-                                            </button>
-                                        </h2>
-                                        <div
-                                            id="panelsStayOpen-collapseCPU"
-                                            class="accordion-collapse collapse show"
-                                            aria-labelledby="headingCPU"
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingCPU">
+                                        <button
+                                            class="accordion-button collapsed"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#panelsStayOpen-collapseCPU"
+                                            aria-expanded="false"
+                                            aria-controls="panelsStayOpen-collapseCPU"
                                         >
-                                            <div class="accordion-body">
-                                                <ul>
-                                                    <li>
-                                                        <input type="checkbox" name="cpu" id="cpu1" value="Core i3" />
-                                                        <label for="cpu1">Core i3</label>
-                                                    </li>
-                                                    <li>
-                                                        <input name="cpu" type="checkbox" id="cpu2" value="Core i5" />
-                                                        <label for="cpu2">Core i5</label>
-                                                    </li>
-                                                    <li>
-                                                        <input name="cpu" type="checkbox" id="cpu3" value="Core i7" />
-                                                        <label for="cpu3">Core i7</label>
-                                                    </li>
-                                                    <li>
-                                                        <input name="cpu" type="checkbox" id="cpu4" value="Core i9" />
-                                                        <label for="cpu4">Core i9</label>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            CPU
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="panelsStayOpen-collapseCPU"
+                                        class="accordion-collapse collapse show"
+                                        aria-labelledby="headingCPU"
+                                    >
+                                        <div class="accordion-body">
+                                            <ul>
+                                                <li>
+                                                    <input type="checkbox" name="cpu" id="cpu1" value="Core i3" />
+                                                    <label for="cpu1">Core i3</label>
+                                                </li>
+                                                <li>
+                                                    <input name="cpu" type="checkbox" id="cpu2" value="Core i5" />
+                                                    <label for="cpu2">Core i5</label>
+                                                </li>
+                                                <li>
+                                                    <input name="cpu" type="checkbox" id="cpu3" value="Core i7" />
+                                                    <label for="cpu3">Core i7</label>
+                                                </li>
+                                                <li>
+                                                    <input name="cpu" type="checkbox" id="cpu4" value="Core i9" />
+                                                    <label for="cpu4">Core i9</label>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingRAM">
-                                            <button
-                                                class="accordion-button"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#panelsStayOpen-collapseRAM"
-                                                aria-expanded="false"
-                                                aria-controls="panelsStayOpen-collapseRAM"
-                                            >
-                                                RAM
-                                            </button>
-                                        </h2>
-                                        <div
-                                            id="panelsStayOpen-collapseRAM"
-                                            class="accordion-collapse collapse show"
-                                            aria-labelledby="collapseRAM"
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingRAM">
+                                        <button
+                                            class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#panelsStayOpen-collapseRAM"
+                                            aria-expanded="false"
+                                            aria-controls="panelsStayOpen-collapseRAM"
                                         >
-                                            <div class="accordion-body">
-                                                <ul>
-                                                    <li>
-                                                        <input name="ram" type="checkbox" id="ram1" value="4Gb" />
-                                                        <label for="ram1">4Gb</label>
-                                                    </li>
-                                                    <li>
-                                                        <input name="ram" type="checkbox" id="ram2" value="8Gb" />
-                                                        <label for="ram2">8Gb</label>
-                                                    </li>
-                                                    <li>
-                                                        <input name="ram" type="checkbox" id="ram3" value="16Gb" />
-                                                        <label for="ram3">16Gb</label>
-                                                    </li>
-                                                    <li>
-                                                        <input name="ram" type="checkbox" id="ram4" value="32Gb" />
-                                                        <label for="ram4">32Gb</label>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            RAM
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="panelsStayOpen-collapseRAM"
+                                        class="accordion-collapse collapse show"
+                                        aria-labelledby="collapseRAM"
+                                    >
+                                        <div class="accordion-body">
+                                            <ul>
+                                                <li>
+                                                    <input name="ram" type="checkbox" id="ram1" value="4Gb" />
+                                                    <label for="ram1">4Gb</label>
+                                                </li>
+                                                <li>
+                                                    <input name="ram" type="checkbox" id="ram2" value="8Gb" />
+                                                    <label for="ram2">8Gb</label>
+                                                </li>
+                                                <li>
+                                                    <input name="ram" type="checkbox" id="ram3" value="16Gb" />
+                                                    <label for="ram3">16Gb</label>
+                                                </li>
+                                                <li>
+                                                    <input name="ram" type="checkbox" id="ram4" value="32Gb" />
+                                                    <label for="ram4">32Gb</label>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingScreenSize">
-                                            <button
-                                                class="accordion-button"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#panelsStayOpen-collapseScreenSize"
-                                                aria-expanded="false"
-                                                aria-controls="panelsStayOpen-collapseScreenSize"
-                                            >
-                                                Screen Size
-                                            </button>
-                                        </h2>
-                                        <div
-                                            id="panelsStayOpen-collapseScreenSize"
-                                            class="accordion-collapse collapse show"
-                                            aria-labelledby="collapseScreenSize"
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingScreenSize">
+                                        <button
+                                            class="accordion-button"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#panelsStayOpen-collapseScreenSize"
+                                            aria-expanded="false"
+                                            aria-controls="panelsStayOpen-collapseScreenSize"
                                         >
-                                            <div class="accordion-body">
-                                                <ul>
-                                                    <li>
-                                                        <input
-                                                            name="screenSize"
-                                                            type="checkbox"
-                                                            id="screen1"
-                                                            value="13"
-                                                        />
-                                                        <label for="screen1">13"</label>
-                                                    </li>
+                                            Screen Size
+                                        </button>
+                                    </h2>
+                                    <div
+                                        id="panelsStayOpen-collapseScreenSize"
+                                        class="accordion-collapse collapse show"
+                                        aria-labelledby="collapseScreenSize"
+                                    >
+                                        <div class="accordion-body">
+                                            <ul>
+                                                <li>
+                                                    <input name="screenSize" type="checkbox" id="screen1" value="13" />
+                                                    <label for="screen1">13"</label>
+                                                </li>
 
-                                                    <li>
-                                                        <input
-                                                            name="screenSize"
-                                                            type="checkbox"
-                                                            id="screen2"
-                                                            value="14"
-                                                        />
-                                                        <label for="screen2">14"</label>
-                                                    </li>
-                                                    <li>
-                                                        <input
-                                                            name="screenSize"
-                                                            type="checkbox"
-                                                            id="screen3"
-                                                            value="15"
-                                                        />
-                                                        <label for="screen3">15"</label>
-                                                    </li>
-                                                    <li>
-                                                        <input
-                                                            name="screenSize"
-                                                            type="checkbox"
-                                                            id="screen4"
-                                                            value="15.6"
-                                                        />
-                                                        <label for="screen4">15.6"</label>
-                                                    </li>
-                                                    <li>
-                                                        <input
-                                                            name="screenSize"
-                                                            type="checkbox"
-                                                            id="screen5"
-                                                            value="17"
-                                                        />
-                                                        <label for="screen5">17"</label>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                <li>
+                                                    <input name="screenSize" type="checkbox" id="screen2" value="14" />
+                                                    <label for="screen2">14"</label>
+                                                </li>
+                                                <li>
+                                                    <input name="screenSize" type="checkbox" id="screen3" value="15" />
+                                                    <label for="screen3">15"</label>
+                                                </li>
+                                                <li>
+                                                    <input
+                                                        name="screenSize"
+                                                        type="checkbox"
+                                                        id="screen4"
+                                                        value="15.6"
+                                                    />
+                                                    <label for="screen4">15.6"</label>
+                                                </li>
+                                                <li>
+                                                    <input name="screenSize" type="checkbox" id="screen5" value="17" />
+                                                    <label for="screen5">17"</label>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface IManufacturerService {
     List<ManufacturerDTO> getIdAndNameAndLogoManufacturer();
+    List<ManufacturerDTO> getIdNameLogoAndProductCount();
+
+
     ManufacturerDTO createManufacturer(ManufacturerDTO manufacturerDTO);
     ManufacturerDTO updateManufacturer(ManufacturerDTO manufacturerDTO);
 

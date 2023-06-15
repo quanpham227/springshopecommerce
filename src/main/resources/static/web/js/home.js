@@ -14,10 +14,10 @@ let filters = {
 
 // Biến global để lưu trữ trạng thái hiện tại của trang
 let currentPage = 1;
-let currentLimit = 8;
+const currentLimit = 8;
 
 // Hàm để gửi yêu cầu API và hiển thị kết quả
-function fetchProducts(start, limit) {
+async function fetchProducts(start, limit) {
     let url = `/web/api/products/filter?start=${start}&limit=${limit}`;
 
     // Thêm tham số name vào URL nếu có
@@ -29,41 +29,49 @@ function fetchProducts(start, limit) {
     if (filters.sort) {
         url += `&sort=${encodeURIComponent(filters.sort)}`;
     }
-    console.log(filters);
-    // Gửi yêu cầu đến endpoint API để lấy danh sách sản phẩm từ vị trí start cho đến số lượng limit và thông tin tìm kiếm/sắp xếp
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(filters),
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            // Lưu trữ danh sách sản phẩm mới lấy được vào biến global
-            productList = [...productList, ...data];
 
-            // Hiển thị danh sách sản phẩm trên trang
-            renderProducts(productList);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(filters),
         });
+
+        if (!response.ok) {
+            throw new Error('Request failed.');
+        }
+
+        const data = await response.json();
+        // Lưu trữ danh sách sản phẩm mới lấy được vào biến global
+        productList = [...productList, ...data];
+
+        // Hiển thị danh sách sản phẩm trên trang
+        renderProducts(productList);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
-// Hàm để gọi API và lấy danh sách nhà cung cấp
-function fetchManufacturers() {
-    fetch('/web/api/manufacturers')
-        .then((response) => response.json())
-        .then((data) => {
-            // Dữ liệu nhà cung cấp được trả về từ server
-            const manufacturers = data;
 
-            // Hiển thị danh sách nhà cung cấp trên view
-            renderManufacturers(manufacturers);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+// Hàm để gọi API và lấy danh sách nhà cung cấp
+async function fetchManufacturers() {
+    try {
+        const response = await fetch('/web/api/manufacturers');
+
+        if (!response.ok) {
+            throw new Error('Request failed.');
+        }
+
+        const data = await response.json();
+        // Dữ liệu nhà cung cấp được trả về từ server
+        const manufacturers = data;
+
+        // Hiển thị danh sách nhà cung cấp trên view
+        renderManufacturers(manufacturers);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 // Hàm để hiển thị danh sách nhà cung cấp trên view
@@ -83,6 +91,7 @@ function renderManufacturers(manufacturers) {
         checkbox.type = 'checkbox';
         checkbox.id = manufacturer.id;
         checkbox.value = manufacturer.id;
+        checkbox.dataset.manufacturer = manufacturer.id;
 
         const logoContainer = document.createElement('div');
         logoContainer.classList.add('logo-url');
@@ -95,7 +104,7 @@ function renderManufacturers(manufacturers) {
 
         const label = document.createElement('label');
         label.htmlFor = manufacturer.id;
-        label.textContent = manufacturer.name;
+        label.textContent = manufacturer.name + ' (' + manufacturer.productCount + ')';
 
         listItem.appendChild(checkbox);
         listItem.appendChild(logoContainer);
@@ -208,7 +217,7 @@ function resetFilters() {
 // Hàm để lấy thông tin tìm kiếm và sắp xếp từ người dùng
 function getFilters() {
     const selectedManufacturer = Array.from(document.querySelectorAll('input[name="manufacturer"]:checked')).map(
-        (checkbox) => checkbox.value,
+        (checkbox) => checkbox.dataset.manufacturer,
     );
     const selectedCpu = Array.from(document.querySelectorAll('input[name="cpu"]:checked')).map(
         (checkbox) => checkbox.value,
@@ -240,18 +249,23 @@ function loadMore() {
     const start = currentPage - 1;
     fetchProducts(start, currentLimit);
 }
+
 document.getElementById('loadMoreBtn').addEventListener('click', function () {
     loadMore(); // Gọi hàm loadMore() khi người dùng click vào nút Load More
 });
+
 // Sự kiện khi người dùng thay đổi các bộ lọc
-document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-    checkbox.addEventListener('change', function () {
-        resetFilters(); // Reset danh sách sản phẩm và thông tin tìm kiếm/sắp xếp
-        getFilters(); // Lấy thông tin tìm kiếm và sắp xếp từ người dùng
-        currentPage = 1; // Reset số trang hiện tại về 1
-        fetchProducts(0, currentLimit);
+function attachCheckboxEvent() {
+    document.addEventListener('change', function (event) {
+        const targetCheckbox = event.target;
+        if (targetCheckbox.type === 'checkbox') {
+            resetFilters();
+            getFilters();
+            currentPage = 1;
+            fetchProducts(0, currentLimit);
+        }
     });
-});
+}
 
 // Sự kiện khi người dùng thay đổi tên sản phẩm
 document.getElementById('nameProduct').addEventListener('input', function () {
@@ -269,7 +283,11 @@ document.getElementById('sort').addEventListener('change', function () {
     fetchProducts(0, currentLimit);
 });
 
-// Gọi hàm fetchManufacturers() để lấy danh sách nhà cung cấp khi trang được tải
+// Gọi hàm để lấy danh sách nhà cung cấp
 fetchManufacturers();
-// Load 10 sản phẩm đầu tiên khi trang được tải
+
+// Gọi hàm để lấy danh sách sản phẩm ban đầu
 fetchProducts(0, currentLimit);
+
+// Gọi hàm để gán sự kiện cho checkbox
+attachCheckboxEvent();
