@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
 
+
 @SpringBootApplication
 public class SpringblogpostApplication {
 

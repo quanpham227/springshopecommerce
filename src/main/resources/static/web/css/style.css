@@ -91,6 +91,7 @@ h6 {
 .header-social-links a:hover {
     color: #1bbd36;
 }
+
 @media (max-width: 768px) {
     .header-social-links {
         padding: 0 15px 0 0;
@@ -104,6 +105,7 @@ h6 {
 .header-cart {
     margin-left: 20px;
     list-style: none;
+    position: relative;
 }
 .header-cart a {
     color: #a0a0a0;
@@ -118,6 +120,135 @@ h6 {
 .header-cart i:hover {
     color: #1bbd36;
 }
+#success-message-container {
+    display: none;
+    position: absolute;
+    top: 50px; /* Điều chỉnh khoảng cách từ top */
+    transform: translateX(-50%);
+}
+
+#success-message {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+    border-radius: 5px;
+    white-space: nowrap;
+    padding: 5px;
+}
+
+.success-icon {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.cart-items {
+    position: absolute;
+    top: 100%;
+    left: -180px;
+    width: 300px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cart-items .cart-item-details {
+    margin-top: 5px;
+    flex-grow: 1;
+}
+
+.cart-items .cart img {
+    margin-top: 10px;
+    height: 50px;
+    width: 55px;
+}
+
+.cart-items .card-name {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.cart-items .card-quantity {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.cart-items .card-price {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.cart-items .total-price {
+    font-size: 13px;
+    font-weight: bold;
+    color: red;
+}
+
+.cart-items .cart-items-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.cart-items .view-cart-button {
+    padding: 8px 16px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header-cart:hover .cart-items {
+    display: block;
+    animation: slide-in 0.3s forwards;
+}
+
+/* Điều chỉnh kiểu dáng cho màn hình điện thoại */
+@media (max-width: 767px) {
+    .cart-items {
+        left: 0;
+        width: 100%;
+    }
+
+    .cart-items .cart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cart-items .cart img {
+        margin-top: 10px;
+        height: auto;
+        width: 100%;
+        max-width: 150px;
+    }
+
+    .cart-items .cart-item-details {
+        margin-top: 10px;
+    }
+
+    .cart-items .card-name {
+        font-size: 14px;
+    }
+
+    .cart-items .card-quantity,
+    .cart-items .card-price {
+        font-size: 14px;
+    }
+
+    .cart-items .total-price {
+        font-size: 15px;
+    }
+
+    .cart-items .view-cart-button {
+        width: 100%;
+    }
+}
+
 @media (max-width: 768px) {
     .header-cart {
         padding: 0 15px 0 0;

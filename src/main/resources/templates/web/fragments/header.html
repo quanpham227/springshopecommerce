@@ -25,13 +25,20 @@
                         <a href="#" class="facebook"><i class="bu bi-facebook"></i></a>
                     </div>
                     <div class="header-cart d-flex">
-                        <form class="d-flex">
-                            <button class="btn" type="submit">
-                                <i class="bi-cart-fill me-1"></i>
-                                Cart
-                                <span class="bg-dark text-white ms-1 rounded-pill">0</span>
-                            </button>
-                        </form>
+                        <button class="btn" type="submit">
+                            <i class="bi-cart-fill bg-light me-1"></i>
+                            <span class="bg-dark text-white ms-1 rounded-pill" id="cart-item-count">0</span>
+                        </button>
+
+                        <div id="success-message-container">
+                            <div id="success-message" class="d-flex align-items-center">
+                                <i class="bi bi-check-circle-fill success-icon"></i>
+                                <span id="success-message-text"></span>
+                            </div>
+                        </div>
+                        <div id="cart-dropdown" class="cart-dropdown">
+                            <div id="cart-items" class="cart-items"></div>
+                        </div>
                     </div>
                 </div>
             </header>

@@ -1,3 +1,5 @@
+import { addToCart, updateCartItems } from './homeFunctions.js';
+
 // Biến global để lưu trữ danh sách sản phẩm
 let productList = [];
 
@@ -14,7 +16,7 @@ let filters = {
 
 // Biến global để lưu trữ trạng thái hiện tại của trang
 let currentPage = 1;
-const currentLimit = 8;
+const currentLimit = 12;
 
 // Hàm để gửi yêu cầu API và hiển thị kết quả
 async function fetchProducts(start, limit) {
@@ -121,6 +123,11 @@ function renderProducts(products) {
     // Xóa danh sách sản phẩm hiện tại
     productListElement.innerHTML = '';
 
+    // Hàm tính giá Việt Nam đồng
+    function formatCurrency(price) {
+        return price.toLocaleString('vi-VN') + ' ₫';
+    }
+
     // Duyệt qua danh sách sản phẩm và tạo các phần tử HTML tương ứng
     let rowElement;
     products.forEach((product, index) => {
@@ -166,7 +173,7 @@ function renderProducts(products) {
         productPrice.classList.add('price', 'text-center');
 
         const delPrice = document.createElement('del');
-        delPrice.textContent = product.price.toLocaleString('vi-VN') + ' ₫'; // Định dạng giá và thêm ký hiệu đơn vị
+        delPrice.textContent = formatCurrency(product.price); // Định dạng giá và thêm ký hiệu đơn vị
         productPrice.appendChild(delPrice);
 
         cardBody.appendChild(productPrice);
@@ -174,7 +181,7 @@ function renderProducts(products) {
         const productDiscount = document.createElement('h5');
         productDiscount.classList.add('price-discount', 'text-center');
         const discountedPrice = product.price - product.price * (product.discount / 100);
-        productDiscount.textContent = `${discountedPrice.toLocaleString('vi-VN')} ₫`;
+        productDiscount.textContent = formatCurrency(discountedPrice);
         cardBody.appendChild(productDiscount);
 
         const starContainer = document.createElement('div');
@@ -193,6 +200,13 @@ function renderProducts(products) {
         btn.textContent = 'Add to Cart';
         addToCartBtn.appendChild(btn);
         card.appendChild(addToCartBtn);
+
+        // Thêm sự kiện click vào nút "Add to Cart"
+        btn.addEventListener('click', () => {
+            const product = products[index]; // Lấy thông tin sản phẩm từ danh sách sản phẩm
+            const { id, name, price, image } = product; // Lấy productId, name, và unitPrice từ sản phẩm
+            addToCart(id, name, 1, price, image.url); // Gọi hàm addToCart với ID của sản phẩm
+        });
 
         // Thêm sản phẩm vào row hiện tại
         rowElement.appendChild(productItem);
@@ -283,11 +297,16 @@ document.getElementById('sort').addEventListener('change', function () {
     fetchProducts(0, currentLimit);
 });
 
-// Gọi hàm để lấy danh sách nhà cung cấp
-fetchManufacturers();
+window.addEventListener('DOMContentLoaded', () => {
+    // Gọi hàm để lấy danh sách nhà cung cấp
+    fetchManufacturers();
 
-// Gọi hàm để lấy danh sách sản phẩm ban đầu
-fetchProducts(0, currentLimit);
+    // Gọi hàm để lấy danh sách sản phẩm ban đầu
+    fetchProducts(0, currentLimit);
 
-// Gọi hàm để gán sự kiện cho checkbox
-attachCheckboxEvent();
+    // Gọi hàm để gán sự kiện cho checkbox
+    attachCheckboxEvent();
+    updateCartItems(); // Gọi hàm updateCartItems để hiển thị thông tin giỏ hàng
+
+    // Các code khác...
+});
