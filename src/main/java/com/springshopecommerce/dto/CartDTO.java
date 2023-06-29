@@ -5,6 +5,7 @@ import java.util.List;
 
 public class CartDTO {
     private List<CartItemDTO> items;
+    private double totalPrice;
 
     public CartDTO() {
         items = new ArrayList<>();
@@ -16,16 +17,21 @@ public class CartDTO {
             if (item.getProductId().equals(cartItem.getProductId())) {
                 // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
                 item.setQuantity(item.getQuantity() + cartItem.getQuantity());
+                updateItemAmount(item); // Cập nhật lại giá trị amount
+                updateTotalPrice(); // Cập nhật lại giá trị totalPrice
                 return;
             }
         }
         // Nếu sản phẩm chưa tồn tại trong giỏ hàng, thêm mới vào
         items.add(cartItem);
+        updateItemAmount(cartItem); // Cập nhật lại giá trị amount
+        updateTotalPrice(); // Cập nhật lại giá trị totalPrice
     }
 
     public void removeItem(Long productId) {
         // Xóa sản phẩm dựa trên ID
         items.removeIf(item -> item.getProductId().equals(productId));
+        updateTotalPrice(); // Cập nhật lại giá trị totalPrice
     }
 
     public int countDistinctProducts() {
@@ -54,16 +60,35 @@ public class CartDTO {
     public void clear() {
         // Xóa tất cả các sản phẩm trong giỏ hàng
         items.clear();
+        updateTotalPrice(); // Cập nhật lại giá trị totalPrice
+    }
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public double getTotal() {
-        // Tính tổng số tiền trong giỏ hàng
+    public void updateItemQuantity(int index, int quantity) {
+        if (index >= 0 && index < items.size()) {
+            CartItemDTO item = items.get(index);
+            item.setQuantity(quantity);
+            updateItemAmount(item); // Cập nhật lại giá trị amount
+        }
+        updateTotalPrice(); // Cập nhật lại giá trị totalPrice
+    }
+
+    private void updateItemAmount(CartItemDTO item) {
+        double discount = item.getDiscount();
+        int quantity = item.getQuantity();
+        double unitPrice = item.getUnitPrice();
+        item.setAmount((unitPrice - (unitPrice * discount / 100)) * quantity);
+    }
+    private void updateTotalPrice() {
         double total = 0;
         for (CartItemDTO item : items) {
-            total += item.getUnitPrice() * item.getQuantity();
+            total += item.getAmount();
         }
-        return total;
+        totalPrice = total;
     }
+
 }
 
 

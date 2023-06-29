@@ -17,4 +17,6 @@ public class CartItemDTO implements Serializable {
     private int quantity;
     private double unitPrice;
     private String image;
+    private double discount;
+    private double amount;
 }

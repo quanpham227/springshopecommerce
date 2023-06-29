@@ -1,4 +1,4 @@
-export async function addToCart(productId, name, quantity, unitPrice, image) {
+export async function addToCart(productId, name, quantity, unitPrice, image, discount) {
     try {
         const response = await fetch('/api/web/cart/add', {
             method: 'POST',
@@ -11,6 +11,7 @@ export async function addToCart(productId, name, quantity, unitPrice, image) {
                 quantity: quantity,
                 unitPrice: unitPrice,
                 image: image,
+                discount: discount,
             }),
         });
         if (response.ok) {

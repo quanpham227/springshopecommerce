@@ -204,8 +204,8 @@ function renderProducts(products) {
         // Thêm sự kiện click vào nút "Add to Cart"
         btn.addEventListener('click', () => {
             const product = products[index]; // Lấy thông tin sản phẩm từ danh sách sản phẩm
-            const { id, name, price, image } = product; // Lấy productId, name, và unitPrice từ sản phẩm
-            addToCart(id, name, 1, price, image.url); // Gọi hàm addToCart với ID của sản phẩm
+            const { id, name, price, image, discount } = product; // Lấy productId, name, và unitPrice từ sản phẩm
+            addToCart(id, name, 1, price, image.url, discount); // Gọi hàm addToCart với ID của sản phẩm
         });
 
         // Thêm sản phẩm vào row hiện tại

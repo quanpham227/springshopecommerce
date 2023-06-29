@@ -11,7 +11,7 @@
     </head>
     <body>
         <div layout:fragment="content">
-            <div class="container">
+            <div class="shop container">
                 <div class="row">
                     <div class="sidebar col-lg-3">
                         <button
@@ -281,19 +281,5 @@
                 </div>
             </div>
         </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const cartButton = document.getElementById('header-cart');
-
-                // Gọi hàm để cập nhật danh sách sản phẩm trong giỏ hàng khi trang vừa load
-                updateCartItems();
-
-                // Thêm sự kiện hover vào phần tử giỏ hàng
-                cartButton.addEventListener('mouseover', function () {
-                    // Gọi hàm để cập nhật danh sách sản phẩm trong giỏ hàng khi hover
-                    updateCartItems();
-                });
-            });
-        </script>
     </body>
 </html>

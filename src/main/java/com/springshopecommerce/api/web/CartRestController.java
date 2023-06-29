@@ -2,7 +2,6 @@ package com.springshopecommerce.api.web;
 
 import com.springshopecommerce.dto.CartDTO;
 import com.springshopecommerce.dto.CartItemDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,11 @@ import java.util.Map;
 @RequestMapping("api/web/cart")
 public class CartRestController {
     private CartDTO cart = new CartDTO();
-    @Autowired
-    private HttpSession httpSession;
+    private final HttpSession httpSession;
+
+    public CartRestController(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody CartItemDTO cartItemDTO) {
         // Lấy thông tin giỏ hàng từ session (nếu có)
@@ -31,7 +33,6 @@ public class CartRestController {
 
         // Thêm sản phẩm vào giỏ hàng
         cart.addItem(cartItemDTO);
-
         return ResponseEntity.ok("Add product to cart success");
     }
 
@@ -45,7 +46,7 @@ public class CartRestController {
         }
 
         List<CartItemDTO> cartItems = cart.getItems();
-        double totalPrice = cart.getTotal();
+        double totalPrice = cart.getTotalPrice();
 
         int countProducts = cart.countDistinctProducts();
 
@@ -57,5 +58,26 @@ public class CartRestController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/items/{index}")
+    public ResponseEntity<Map<String, Object>> updateCartItemQuantity(@PathVariable int index, @RequestBody Map<String, Integer> requestBody) {
+        int quantity = requestBody.get("quantity");
 
+        CartDTO cart = (CartDTO) httpSession.getAttribute("cart");
+
+        if (cart == null) {
+            cart = new CartDTO();
+            httpSession.setAttribute("cart", cart);
+        }
+
+        cart.updateItemQuantity(index, quantity);
+
+        List<CartItemDTO> cartItems = cart.getItems();
+        double totalPrice = cart.getTotalPrice();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("cartItems", cartItems);
+        response.put("totalPrice", totalPrice);
+
+        return ResponseEntity.ok(response);
+    }
 }
